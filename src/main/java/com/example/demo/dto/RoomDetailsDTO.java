@@ -14,12 +14,16 @@ public class RoomDetailsDTO {
     private String floorName;
     private String roomName;
     private Long id;
+    private String roomType;
+    private double amount;
 
-    RoomDetailsDTO(Integer roomNumber,String roomName,Integer floorNumber,String floorName,Long id){
+    RoomDetailsDTO(Integer roomNumber,String roomName,Integer floorNumber,String floorName,Long id,String roomType,double amount){
         this.floorNumber = floorNumber;
         this.floorName = floorName;
         this.roomName = roomName;
         this.roomNumber = roomNumber;
         this.id = id;
+        this.amount = amount;
+        this.roomType = roomType;
     }
 }

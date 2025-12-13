@@ -31,6 +31,9 @@ public class Room implements Serializable {
     @Column(unique = true, nullable = false)
     private String roomName;
 
+    @Column(unique = true, nullable = false)
+    private Integer roomType;
+
 
     @Column(name = "status")
     private Integer status;
