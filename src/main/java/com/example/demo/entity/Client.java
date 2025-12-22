@@ -39,6 +39,16 @@ public class Client implements Serializable {
 
     @Column(name = "status")
     private Integer status;
+
+
+    @OneToOne
+    @JoinColumn(name = "id", unique = true) // FK column in client table
+    private ClientAttachment clientAttachment;
+
+
+
+
+
     // Getters and Setters
 }
 // Full implementation will include CRUD and JWT logic

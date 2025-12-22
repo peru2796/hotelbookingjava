@@ -18,6 +18,13 @@ public class ClientAttachment implements Serializable {
     @Column(nullable = false)
     private Long clientId;
 
+
+
+//    @JoinColumn(name = "client_id")  // FK column
+//    @MapsId                         // Share PK from the client association
+//    private Client client;
+
+
     private byte[] clientImage;
 
     private String fileName;
