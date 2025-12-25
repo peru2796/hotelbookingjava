@@ -6,12 +6,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface RoomDetailsRepository extends JpaRepository<Room,Integer> {
 
-    @Query("select new com.example.demo.dto.RoomDetailsDTO(r.roomNumber,r.roomName,f.floorNumber,f.floorName,r.id,rt.roomType,rt.amount) from Room r,Floor f,RoomType rt WHERE r.floorNumber = f.floorNumber and r.status = 1 and f.status = 1 and rt.id = r.roomType and rt.status =1")
-    Optional<List<RoomDetailsDTO>> getRoomDetailsList();
+    @Query("select new com.example.demo.dto.RoomDetailsDTO(r.roomNumber,r.roomName,f.floorNumber,f.floorName,r.id,rt.roomType,rt.amount) from Room r,Floor f,RoomType rt " +
+            "WHERE r.floorNumber = f.floorNumber and r.status = 1 and f.status = 1 and rt.id = r.roomType and rt.status =1 and r.id NOT IN (select roomId from Booking where (checkinDts between :startDate and :endDate OR checkoutDts between :startDate and :endDate ) and transactionStatus not in (24,26))")
+    Optional<List<RoomDetailsDTO>> getRoomDetailsList(LocalDateTime startDate, LocalDateTime endDate);
+
+
 }

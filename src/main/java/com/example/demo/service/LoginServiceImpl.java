@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -45,10 +47,17 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public ResponseEntity<Object> getRoomDetails() {
-        Optional<List<RoomDetailsDTO>> getRoomDetails = roomDetailsRepository.getRoomDetailsList();
+    public ResponseEntity<Object> getRoomDetails(String startDate,String endDate) {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        LocalDateTime startDateTime = LocalDateTime.parse(startDate, formatter);
+        LocalDateTime endDateTime = LocalDateTime.parse(endDate, formatter);
+        Optional<List<RoomDetailsDTO>> getRoomDetails = roomDetailsRepository.getRoomDetailsList(startDateTime, endDateTime);
         return getRoomDetails.<ResponseEntity<Object>>map(roomDetailsDTOS -> new ResponseEntity<>(roomDetailsDTOS, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>("Please configure the room Details...", HttpStatus.OK));
     }
+
+   
 }
 
 

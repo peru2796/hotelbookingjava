@@ -8,5 +8,5 @@ import org.springframework.stereotype.Service;
 public interface LoginService {
 
     ResponseEntity<Object> validateLogin(User user);
-    ResponseEntity<Object> getRoomDetails();
+    ResponseEntity<Object> getRoomDetails(String startDate,String endDate);
 }
