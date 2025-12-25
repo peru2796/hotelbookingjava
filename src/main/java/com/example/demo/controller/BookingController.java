@@ -2,6 +2,8 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Booking;
 import com.example.demo.service.BookingService;
+import com.example.demo.service.BookingServiceImpl;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,37 +12,34 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/bookings")
-@CrossOrigin(origins = "http://localhost:4300")
 public class BookingController {
 
     @Autowired
     private BookingService bookingService;
 
-    @PostMapping
-    public ResponseEntity<Booking> create(@RequestBody Booking booking) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(bookingService.create(booking));
+    @PostMapping("/addBooking")
+    public ResponseEntity<Object> create(@RequestBody Booking booking) {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        return new ResponseEntity<>(bookingService.createBooking(booking),HttpStatus.OK);
     }
 
-    @GetMapping
-    public List<Booking> getAll() { return bookingService.getAll(); }
+    @GetMapping("/getBookings")
+    public List<Booking> getAll() { return bookingService.getBookingList(); }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Booking> getById(@PathVariable Long id) {
-        return bookingService.getById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    @GetMapping("/getBookingDetailsById")
+    public ResponseEntity<Booking> getById(@RequestHeader("id") Long id) {
+        return  new ResponseEntity<>(bookingService.getBookingDetailsById(id),HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Booking> update(@PathVariable Long id, @RequestBody Booking booking) {
-        return ResponseEntity.ok(bookingService.update(id, booking));
+    @PostMapping("/updateBooking")
+    public ResponseEntity<Object> update(@RequestBody Booking booking) {
+        return ResponseEntity.ok(bookingService.createBooking(booking));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        bookingService.delete(id);
-        return ResponseEntity.noContent().build();
+    @PostMapping("/deleteBooking")
+    public List<Booking> delete( @RequestBody Booking booking) {
+        return bookingService.deleteBooking(booking);
     }
 }
 // Full implementation will include CRUD and JWT logic
