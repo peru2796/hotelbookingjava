@@ -1,14 +1,12 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.BookingDTO;
-import com.example.demo.entity.Booking;
-import com.example.demo.entity.BookingHistory;
-import com.example.demo.entity.Client;
-import com.example.demo.entity.PaymentHistory;
+import com.example.demo.entity.*;
 import com.example.demo.mapper.BookingMapper;
 import com.example.demo.repository.BookingHistoryRepository;
 import com.example.demo.repository.BookingRepository;
 import com.example.demo.repository.PaymentHistoryRepository;
+import com.example.demo.repository.RoomTypeRepository;
 import com.example.demo.util.AppConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,6 +35,9 @@ public class BookingServiceImpl implements BookingService{
 
     @Autowired
     private ClientService clientService;
+
+    @Autowired
+    private RoomTypeRepository roomTypeRepository;
 
     @Autowired
     BookingMapper bookingMapper;
@@ -102,7 +103,16 @@ public class BookingServiceImpl implements BookingService{
     public List<BookingDTO> getBookingAndClientDetails(){
         List<Booking> bookingList = getBookingList();
         List<Client> clientList = clientService.getClientList();
-       return bookingMapper.getBookingDTOFromClientBooking(bookingList,clientList);
+        List<RoomType> roomTypeList = roomTypeRepository.findAll();
+       return bookingMapper.getBookingDTOFromClientBookingList(bookingList,clientList,roomTypeList);
+    }
+
+    @Override
+    public BookingDTO getBookingAndClientDetailsById(Long id){
+        Booking booking = Optional.ofNullable(getBookingDetailsById(id)).get();
+        Client client = clientService.getClientById(booking.getClientId()).get();
+        List<RoomType> roomTypeList = roomTypeRepository.findAll();
+        return bookingMapper.getBookingDTOFromClientBooking(booking,client,roomTypeList);
     }
 
 }

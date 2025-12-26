@@ -29,8 +29,8 @@ public class BookingController {
     public List<BookingDTO> getAll() { return bookingService.getBookingAndClientDetails(); }
 
     @GetMapping("/getBookingDetailsById")
-    public ResponseEntity<Booking> getById(@RequestHeader("id") Long id) {
-        return  new ResponseEntity<>(bookingService.getBookingDetailsById(id),HttpStatus.OK);
+    public ResponseEntity<BookingDTO> getById(@RequestHeader("id") Long id) {
+        return ResponseEntity.ok(bookingService.getBookingAndClientDetailsById(id));
     }
 
     @PostMapping("/updateBooking")

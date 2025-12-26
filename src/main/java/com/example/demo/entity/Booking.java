@@ -36,7 +36,12 @@ public class Booking implements Serializable {
     private Timestamp checkinDts;
     private Timestamp checkoutDts;
     private Timestamp cancelledtDts;
+
     private String comments;
+
+    private Integer adultCount;
+    private Integer childrenCount;
+    private Integer roomType;
 
     @Column(name = "status")
     private Integer status = 1;

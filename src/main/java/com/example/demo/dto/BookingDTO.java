@@ -54,4 +54,11 @@ public class BookingDTO {
     private String fileName;
 
     private String fileType;
+
+    private Integer adultCount;
+    private Integer childrenCount;
+    private Integer roomType;
+
+    private String roomTypeName;
+    private String statusName;
 }

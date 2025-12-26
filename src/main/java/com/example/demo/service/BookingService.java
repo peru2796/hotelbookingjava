@@ -15,4 +15,5 @@ public interface BookingService {
     List<Booking> deleteBooking(Booking booking);
 
     public List<BookingDTO> getBookingAndClientDetails();
+    public BookingDTO getBookingAndClientDetailsById(Long id);
 }
