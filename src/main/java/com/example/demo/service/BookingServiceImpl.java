@@ -33,7 +33,7 @@ public class BookingServiceImpl implements BookingService{
     private PaymentHistoryRepository paymentHistoryRepository;
 
     @Override
-    public List<Booking> createBooking(Booking booking) {
+    public String createBooking(Booking booking) {
             if(null != booking){
               booking =   bookingRepository.save(booking);
                if(null != booking.getPaymentHistory()){
@@ -61,7 +61,7 @@ public class BookingServiceImpl implements BookingService{
                    bookingHistoryRepository.saveAll(bookingHistoryList);
                }
             }
-            return getBookingList();
+            return AppConstants.STATUS_SUCCESS;
     }
 
     @Override
@@ -88,4 +88,6 @@ public class BookingServiceImpl implements BookingService{
 
         return getBookingList();
     }
+
+
 }

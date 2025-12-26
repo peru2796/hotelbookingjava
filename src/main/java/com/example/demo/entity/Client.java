@@ -43,7 +43,7 @@ public class Client implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "id", unique = true) // FK column in client table
-    private ClientAttachment clientAttachment;
+    private transient ClientAttachment clientAttachment;
 
 
 

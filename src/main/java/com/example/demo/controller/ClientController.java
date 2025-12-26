@@ -1,16 +1,19 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.Booking;
 import com.example.demo.entity.Client;
 import com.example.demo.entity.ClientAttachment;
 import com.example.demo.service.ClientService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class ClientController {
@@ -38,22 +41,41 @@ public class ClientController {
                 throw new RuntimeException("failed to load the file" ,e);
             }
         }
-        return clientService.addClient(client,clientAttachment);
-
+        return ResponseEntity.ok(clientService.addClient(client,clientAttachment));
     }
 
     @GetMapping("/getClientList")
-    public ResponseEntity<Object> getClientList(){
-        return clientService.getClientList();
+    public ResponseEntity<List<Client>> getClientList(){
+        return ResponseEntity.ok(clientService.getClientList());
     }
 
     @GetMapping("/getClientByID")
-    public ResponseEntity<Object> getClientByID(@RequestHeader("id") Long id){
-        return clientService.getClientById(id);
+    public ResponseEntity<Optional<Client>> getClientByID(@RequestHeader("id") Long id){
+        return ResponseEntity.ok(clientService.getClientById(id));
     }
 
     @GetMapping("/getClientByMobileNumber")
-    public ResponseEntity<Object> getClientByMobileNumber(@RequestHeader("mobileNumber") String mobileNumber){
-        return clientService.getClientByMobileNumber(mobileNumber);
+    public ResponseEntity<Optional<Client>> getClientByMobileNumber(@RequestHeader("mobileNumber") String mobileNumber){
+        return ResponseEntity.ok(clientService.getClientByMobileNumber(mobileNumber));
+    }
+
+    @PostMapping("/createClientAndBooking")
+    public ResponseEntity<String> createClientAndBooking(@RequestPart("clientObject") @Valid Client client, @RequestPart("bookingObject") @Valid Booking booking,@RequestPart("files") MultipartFile file){
+
+        ClientAttachment clientAttachment = null;
+        // Validate files
+        if (null != file) {
+            clientAttachment = new ClientAttachment();
+            clientAttachment.setFileName(file.getOriginalFilename());
+            clientAttachment.setFileType(file.getContentType());
+            clientAttachment.setStatus(1);
+            try {
+                clientAttachment.setClientImage(file.getBytes());
+            } catch (IOException e) {
+                throw new RuntimeException("failed to load the file" ,e);
+            }
+        }
+        client.setClientAttachment(clientAttachment);
+        return  ResponseEntity.ok(clientService.createClientAndBooking(client,booking,clientAttachment));
     }
 }// Full implementation will include CRUD and JWT logic
