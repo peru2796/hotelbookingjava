@@ -23,7 +23,7 @@ public interface BookingMapperInterface {
 
     @Mapping(target = "roomNumber",source = "roomDetailsDTO.roomNumber")
     @Mapping(target = "roomTypeName",source = "roomDetailsDTO.roomType")
-    @Mapping(target = "roomType",source = "roomDetailsDTO.id")
+    @Mapping(target = "roomType",source = "roomDetailsDTO.roomId")
     @Mapping(target = "roomId",source = "roomDetailsDTO.id")
     @Mapping(target = "roomRent",source = "roomDetailsDTO.amount")
     @Mapping(target = "statusName",constant = "Available")
@@ -31,7 +31,7 @@ public interface BookingMapperInterface {
 
     @Mapping(target = "roomNumber",source = "roomDetailsDTO.roomNumber")
     @Mapping(target = "roomTypeName",source = "roomDetailsDTO.roomType")
-    @Mapping(target = "roomType",source = "roomDetailsDTO.id")
+    @Mapping(target = "roomType",source = "booking.roomType")
     @Mapping(target = "roomId",source = "roomDetailsDTO.id")
     @Mapping(target = "roomRent",source = "roomDetailsDTO.amount")
     @Mapping(target = "bookingId",source = "booking.id")

@@ -18,9 +18,9 @@ public class RoomDetailsDTO {
     private Long id;
     private String roomType;
     private double amount;
+    private Integer roomId;
 
-
-    RoomDetailsDTO(Integer roomNumber,String roomName,Integer floorNumber,String floorName,Long id,String roomType,double amount){
+    RoomDetailsDTO(Integer roomNumber,String roomName,Integer floorNumber,String floorName,Long id,String roomType,double amount,Integer roomId){
         this.floorNumber = floorNumber;
         this.floorName = floorName;
         this.roomName = roomName;
@@ -28,5 +28,6 @@ public class RoomDetailsDTO {
         this.id = id;
         this.amount = amount;
         this.roomType = roomType;
+        this.roomId =roomId;
     }
 }
