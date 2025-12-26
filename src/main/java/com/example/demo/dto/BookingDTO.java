@@ -62,4 +62,6 @@ public class BookingDTO {
     private String roomTypeName;
     private String statusName;
     private Double roomRent;
+    private String floorName;
+    private Integer floorNumber;
 }

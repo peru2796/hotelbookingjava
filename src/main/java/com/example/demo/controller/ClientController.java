@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.ApiResponse;
 import com.example.demo.entity.Booking;
 import com.example.demo.entity.Client;
 import com.example.demo.entity.ClientAttachment;
@@ -60,7 +61,7 @@ public class ClientController {
     }
 
     @PostMapping("/createClientAndBooking")
-    public ResponseEntity<String> createClientAndBooking(@RequestPart("clientObject") @Valid Client client, @RequestPart("bookingObject") @Valid Booking booking,@RequestPart("files") MultipartFile file){
+    public ResponseEntity<ApiResponse> createClientAndBooking(@RequestPart("clientObject") @Valid Client client, @RequestPart("bookingObject") @Valid Booking booking,@RequestPart("files") MultipartFile file){
 
         ClientAttachment clientAttachment = null;
         // Validate files
@@ -76,6 +77,7 @@ public class ClientController {
             }
         }
         client.setClientAttachment(clientAttachment);
-        return  ResponseEntity.ok(clientService.createClientAndBooking(client,booking,clientAttachment));
+        ApiResponse apiResponse = new ApiResponse("200 OK",clientService.createClientAndBooking(client,booking,clientAttachment));
+        return  ResponseEntity.ok(apiResponse);
     }
 }// Full implementation will include CRUD and JWT logic

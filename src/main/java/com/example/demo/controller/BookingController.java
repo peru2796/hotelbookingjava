@@ -22,10 +22,9 @@ public class BookingController {
     private BookingService bookingService;
 
     @PostMapping("/addBooking")
-    public ResponseEntity<String> create(@RequestBody Booking booking) {
-        ObjectMapper objectMapper = new ObjectMapper();
-//        ApiResponse apiResponse = new ApiResponse("200 OK",bookingService.createBooking(booking));
-        return new ResponseEntity<>(bookingService.createBooking(booking),HttpStatus.OK);
+    public ResponseEntity<ApiResponse> create(@RequestBody Booking booking) {
+        ApiResponse apiResponse = new ApiResponse("200 OK",bookingService.createBooking(booking));
+        return new ResponseEntity<>(apiResponse,HttpStatus.OK);
     }
 
     @GetMapping("/getBookings")
