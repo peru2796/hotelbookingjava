@@ -115,4 +115,9 @@ public class BookingServiceImpl implements BookingService{
         return bookingMapper.getBookingDTOFromClientBooking(booking,client,roomTypeList);
     }
 
+    @Override
+    public List<RoomType> getRoomType(){
+        return roomTypeRepository.findAll();
+    }
+
 }

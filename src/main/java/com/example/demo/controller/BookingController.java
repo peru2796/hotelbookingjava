@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.BookingDTO;
 import com.example.demo.entity.Booking;
+import com.example.demo.entity.RoomType;
 import com.example.demo.service.BookingService;
 import com.example.demo.service.BookingServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,6 +42,11 @@ public class BookingController {
     @PostMapping("/deleteBooking")
     public List<Booking> delete( @RequestBody Booking booking) {
         return bookingService.deleteBooking(booking);
+    }
+
+    @GetMapping("/getRoomType")
+    public List<RoomType> getRoomType(){
+        return bookingService.getRoomType();
     }
 }
 // Full implementation will include CRUD and JWT logic
