@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -51,12 +52,14 @@ public class LoginServiceImpl implements LoginService {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
+
         LocalDateTime startDateTime = LocalDateTime.parse(startDate, formatter);
         LocalDateTime endDateTime = LocalDateTime.parse(endDate, formatter);
-        Optional<List<RoomDetailsDTO>> getRoomDetails = roomDetailsRepository.getRoomDetailsList(startDateTime, endDateTime);
-        return getRoomDetails.<ResponseEntity<Object>>map(roomDetailsDTOS -> new ResponseEntity<>(roomDetailsDTOS, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>("Please configure the room Details...", HttpStatus.OK));
+        List<RoomDetailsDTO> getRoomDetails = roomDetailsRepository.getRoomDetailsList(startDateTime, endDateTime);
+        getRoomDetails = getRoomDetails.stream().sorted(Comparator.comparing(RoomDetailsDTO::getId))
+                .toList();
+        return new ResponseEntity<>(getRoomDetails, HttpStatus.OK);
     }
-
    
 }
 

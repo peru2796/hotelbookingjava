@@ -153,7 +153,7 @@ public class BookingServiceImpl implements BookingService{
 @Override
     public String updateBooking(Long id,Booking booking){
 
-        int result = bookingRepository.updateBooking(id, booking.getCheckoutDts().toLocalDateTime(),booking.getComments());
+        int result = bookingRepository.updateBooking(id, booking.getCheckoutDts(),booking.getComments());
         return "Success";
     }
 

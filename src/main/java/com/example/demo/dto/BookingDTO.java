@@ -5,6 +5,7 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -20,13 +21,13 @@ public class BookingDTO {
     private String paymentType;
     private Integer transactionStatus;
 
-    private Timestamp bookedDts;
+    private LocalDateTime  bookedDts;
 
-    private Timestamp arrivalDts;
+    private LocalDateTime arrivalDts;
 
-    private Timestamp checkinDts;
-    private Timestamp checkoutDts;
-    private Timestamp cancelledtDts;
+    private LocalDateTime  checkinDts;
+    private LocalDateTime  checkoutDts;
+    private LocalDateTime  cancelledtDts;
     private String comments;
 
     private String firstName;

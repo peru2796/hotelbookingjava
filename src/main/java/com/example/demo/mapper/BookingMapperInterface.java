@@ -34,6 +34,7 @@ public interface BookingMapperInterface {
     @Mapping(target = "roomType",source = "roomDetailsDTO.id")
     @Mapping(target = "roomId",source = "roomDetailsDTO.id")
     @Mapping(target = "roomRent",source = "roomDetailsDTO.amount")
+    @Mapping(target = "bookingId",source = "booking.id")
     @Mapping(target = "statusName",source = "booking.transactionStatus",qualifiedByName = "transactionStatusMapping")
     BookingDTO toRoomDetailsDto(RoomDetailsDTO roomDetailsDTO,Booking booking,Client client);
 

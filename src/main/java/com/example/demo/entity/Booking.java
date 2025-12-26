@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,13 +30,13 @@ public class Booking implements Serializable {
     private Integer transactionStatus;
 
     @CreationTimestamp
-    private Timestamp bookedDts;
+    private LocalDateTime  bookedDts;
 
-    private Timestamp arrivalDts;
+    private LocalDateTime  arrivalDts;
 
-    private Timestamp checkinDts;
-    private Timestamp checkoutDts;
-    private Timestamp cancelledtDts;
+    private LocalDateTime checkinDts;
+    private LocalDateTime  checkoutDts;
+    private LocalDateTime  cancelledtDts;
 
     private String comments;
 
