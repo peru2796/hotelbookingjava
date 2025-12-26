@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +31,8 @@ public class BookingMapper {
             roomType.ifPresent(type -> bookingDTO.setRoomTypeName(type.getRoomType()));
             bookingDTOList.add(bookingDTO);
         });
-        return bookingDTOList;
+        return bookingDTOList.stream().sorted(Comparator.comparing(BookingDTO::getBookingId))
+                .toList();
     }
 
     public BookingDTO getBookingDTOFromClientBooking(Booking booking, Client client, List<RoomType> roomTypeList){

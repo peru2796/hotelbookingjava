@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -84,10 +85,7 @@ public class BookingServiceImpl implements BookingService{
     @Override
     public List<Booking> getBookingList() {
 
-        List<Booking> bookingList = bookingRepository.findAll();
-//        List<Booking> bookingList = bookingHistoryRepository.findAll();
-//        List<Booking> bookingList = paymentHistoryRepository.findAll();
-        return bookingList;
+        return bookingRepository.findAll().stream().sorted(Comparator.comparing(Booking::getId)).toList().reversed();
 
     }
 
@@ -148,7 +146,8 @@ public class BookingServiceImpl implements BookingService{
          }
           bookingDTOList.add(bookingDTO);
       });
-      return bookingDTOList;
+      return bookingDTOList.stream().sorted(Comparator.comparing(BookingDTO::getRoomId))
+              .toList();
     }
 @Override
     public String updateBooking(Long id,Booking booking){

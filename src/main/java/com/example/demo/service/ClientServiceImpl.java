@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.awt.print.Book;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,7 +47,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public List<Client> getClientList() {
-        return clientRepository.findAll();
+        return clientRepository.findAll().stream().sorted(Comparator.comparing(Client::getId)).toList().reversed();
     }
 
     @Override
