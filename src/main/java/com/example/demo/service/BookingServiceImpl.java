@@ -1,12 +1,11 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.BookingDTO;
+import com.example.demo.dto.RoomDetailsDTO;
 import com.example.demo.entity.*;
 import com.example.demo.mapper.BookingMapper;
-import com.example.demo.repository.BookingHistoryRepository;
-import com.example.demo.repository.BookingRepository;
-import com.example.demo.repository.PaymentHistoryRepository;
-import com.example.demo.repository.RoomTypeRepository;
+import com.example.demo.mapper.BookingMapperInterface;
+import com.example.demo.repository.*;
 import com.example.demo.util.AppConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -40,7 +41,13 @@ public class BookingServiceImpl implements BookingService{
     private RoomTypeRepository roomTypeRepository;
 
     @Autowired
+    private RoomDetailsRepository roomDetailsRepository;
+
+    @Autowired
     BookingMapper bookingMapper;
+
+    @Autowired
+    BookingMapperInterface bookingMapperInterface;
 
     @Override
     public String createBooking(Booking booking) {
@@ -118,6 +125,36 @@ public class BookingServiceImpl implements BookingService{
     @Override
     public List<RoomType> getRoomType(){
         return roomTypeRepository.findAll();
+    }
+    @Override
+    public List<BookingDTO> getRoomDetails(String startDate,String endDate){
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        LocalDateTime startDateTime = LocalDateTime.parse(startDate, formatter);
+        LocalDateTime endDateTime = LocalDateTime.parse(endDate, formatter);
+
+      List<RoomDetailsDTO> roomDetailsDTOList =  roomDetailsRepository.getRoomList().get();
+      List<Booking> bookingList = bookingRepository.getRoomDetailsList(startDateTime,endDateTime);
+      List<BookingDTO> bookingDTOList = new ArrayList<>();
+      roomDetailsDTOList.forEach(roomDetails ->{
+          BookingDTO bookingDTO = new BookingDTO();
+          Optional<Booking> bookingObject = bookingList.stream().filter( x -> x.getRoomId().equals(roomDetails.getId())).findFirst();
+         if(bookingObject.isPresent()){
+             Client client = clientService.getClientById(bookingObject.get().getClientId()).get();
+             bookingDTO = bookingMapperInterface.toRoomDetailsDto(roomDetails,bookingObject.get(),client);
+         }else{
+             bookingDTO = bookingMapperInterface.toRoomDetailsDto(roomDetails);
+         }
+          bookingDTOList.add(bookingDTO);
+      });
+      return bookingDTOList;
+    }
+@Override
+    public String updateBooking(Long id,Booking booking){
+
+        int result = bookingRepository.updateBooking(id, booking.getCheckoutDts().toLocalDateTime(),booking.getComments());
+        return "Success";
     }
 
 }

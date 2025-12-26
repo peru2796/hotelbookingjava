@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -16,6 +18,7 @@ public class RoomDetailsDTO {
     private Long id;
     private String roomType;
     private double amount;
+
 
     RoomDetailsDTO(Integer roomNumber,String roomName,Integer floorNumber,String floorName,Long id,String roomType,double amount){
         this.floorNumber = floorNumber;

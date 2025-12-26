@@ -1,6 +1,7 @@
 package com.example.demo.mapper;
 
 import com.example.demo.dto.BookingDTO;
+import com.example.demo.dto.RoomDetailsDTO;
 import com.example.demo.entity.Booking;
 import com.example.demo.entity.Client;
 import com.example.demo.util.AppConstants;
@@ -20,18 +21,34 @@ public interface BookingMapperInterface {
     @Mapping(target = "statusName",source = "booking.transactionStatus",qualifiedByName = "transactionStatusMapping")
     BookingDTO toBookingDto(Booking booking, Client client);
 
+    @Mapping(target = "roomNumber",source = "roomDetailsDTO.roomNumber")
+    @Mapping(target = "roomTypeName",source = "roomDetailsDTO.roomType")
+    @Mapping(target = "roomType",source = "roomDetailsDTO.id")
+    @Mapping(target = "roomId",source = "roomDetailsDTO.id")
+    @Mapping(target = "roomRent",source = "roomDetailsDTO.amount")
+    @Mapping(target = "statusName",constant = "Available")
+    BookingDTO toRoomDetailsDto(RoomDetailsDTO roomDetailsDTO);
+
+    @Mapping(target = "roomNumber",source = "roomDetailsDTO.roomNumber")
+    @Mapping(target = "roomTypeName",source = "roomDetailsDTO.roomType")
+    @Mapping(target = "roomType",source = "roomDetailsDTO.id")
+    @Mapping(target = "roomId",source = "roomDetailsDTO.id")
+    @Mapping(target = "roomRent",source = "roomDetailsDTO.amount")
+    @Mapping(target = "statusName",source = "booking.transactionStatus",qualifiedByName = "transactionStatusMapping")
+    BookingDTO toRoomDetailsDto(RoomDetailsDTO roomDetailsDTO,Booking booking,Client client);
 
     @Named("transactionStatusMapping")
     default String transactionStatusMapping(Integer transactionStatus) {
+       String result = "Available";
         if(transactionStatus.equals(AppConstants.CHECKED_IN_CODE))
-            return "Checked-in";
+            result = "Checked-in";
         if(transactionStatus.equals(AppConstants.CHECKOUT_STATUS_CODE))
-            return "Checked-out";
+            result= "Checked-out";
         if(transactionStatus.equals(AppConstants.BOOKED_STATUS_CODE))
-            return "Booked";
+            result = "Booked";
         if(transactionStatus.equals(AppConstants.CANCELLED_STATUS_CODE))
-            return "Cancelled";
-        return null;
+            result = "Cancelled";
+        return result;
     }
 
 }

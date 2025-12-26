@@ -34,7 +34,6 @@ public class Client implements Serializable {
     private String city;
     private String state;
 
-    @Column(nullable = false)
     private Integer pinCode;
 
     @Column(name = "status")
