@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.BookingDTO;
 import com.example.demo.entity.Booking;
 import org.springframework.http.ResponseEntity;
 
@@ -13,5 +14,5 @@ public interface BookingService {
     Booking getBookingDetailsById(Long id);
     List<Booking> deleteBooking(Booking booking);
 
-
+    public List<BookingDTO> getBookingAndClientDetails();
 }

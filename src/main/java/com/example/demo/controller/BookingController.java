@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.BookingDTO;
 import com.example.demo.entity.Booking;
 import com.example.demo.service.BookingService;
 import com.example.demo.service.BookingServiceImpl;
@@ -25,7 +26,7 @@ public class BookingController {
     }
 
     @GetMapping("/getBookings")
-    public List<Booking> getAll() { return bookingService.getBookingList(); }
+    public List<BookingDTO> getAll() { return bookingService.getBookingAndClientDetails(); }
 
     @GetMapping("/getBookingDetailsById")
     public ResponseEntity<Booking> getById(@RequestHeader("id") Long id) {

@@ -48,5 +48,9 @@ public class Booking implements Serializable {
     @OneToMany(mappedBy = "booking")
     @JsonManagedReference("booking-history")// FK column in client table
     private List<BookingHistory> bookingHistory = new ArrayList<>();
+
+    @OneToOne
+    @JoinColumn(name = "id")
+    private transient Client c;
 }
 // Full implementation will include CRUD and JWT logic

@@ -1,8 +1,11 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.BookingDTO;
 import com.example.demo.entity.Booking;
 import com.example.demo.entity.BookingHistory;
+import com.example.demo.entity.Client;
 import com.example.demo.entity.PaymentHistory;
+import com.example.demo.mapper.BookingMapper;
 import com.example.demo.repository.BookingHistoryRepository;
 import com.example.demo.repository.BookingRepository;
 import com.example.demo.repository.PaymentHistoryRepository;
@@ -31,6 +34,12 @@ public class BookingServiceImpl implements BookingService{
 
     @Autowired
     private PaymentHistoryRepository paymentHistoryRepository;
+
+    @Autowired
+    private ClientService clientService;
+
+    @Autowired
+    BookingMapper bookingMapper;
 
     @Override
     public String createBooking(Booking booking) {
@@ -89,5 +98,11 @@ public class BookingServiceImpl implements BookingService{
         return getBookingList();
     }
 
+    @Override
+    public List<BookingDTO> getBookingAndClientDetails(){
+        List<Booking> bookingList = getBookingList();
+        List<Client> clientList = clientService.getClientList();
+       return bookingMapper.getBookingDTOFromClientBooking(bookingList,clientList);
+    }
 
 }
