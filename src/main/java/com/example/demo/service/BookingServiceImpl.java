@@ -85,7 +85,7 @@ public class BookingServiceImpl implements BookingService{
     @Override
     public List<Booking> getBookingList() {
 
-        return bookingRepository.findAll().stream().sorted(Comparator.comparing(Booking::getId)).toList().reversed();
+        return bookingRepository.findAll().stream().sorted(Comparator.comparing(Booking::getId).reversed()).toList();
 
     }
 

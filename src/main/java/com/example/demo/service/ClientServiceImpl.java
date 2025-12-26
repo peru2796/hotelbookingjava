@@ -47,7 +47,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public List<Client> getClientList() {
-        return clientRepository.findAll().stream().sorted(Comparator.comparing(Client::getId)).toList().reversed();
+        return clientRepository.findAll().stream().sorted(Comparator.comparing(Client::getId).reversed()).toList();
     }
 
     @Override
