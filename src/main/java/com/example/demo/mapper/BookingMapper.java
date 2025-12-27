@@ -4,9 +4,7 @@ import com.example.demo.dto.BookingDTO;
 import com.example.demo.entity.Booking;
 import com.example.demo.entity.Client;
 import com.example.demo.entity.RoomType;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.ReportingPolicy;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -31,7 +29,7 @@ public class BookingMapper {
             roomType.ifPresent(type -> bookingDTO.setRoomTypeName(type.getRoomType()));
             bookingDTOList.add(bookingDTO);
         });
-        return bookingDTOList.stream().sorted(Comparator.comparing(BookingDTO::getBookingId))
+        return bookingDTOList.stream().sorted(Comparator.comparing(BookingDTO::getBookingId).reversed())
                 .toList();
     }
 

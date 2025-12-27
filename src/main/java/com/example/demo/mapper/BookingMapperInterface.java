@@ -10,6 +10,9 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @Mapper(
         componentModel = "spring", // lets you @Autowired the mapper
         unmappedTargetPolicy = ReportingPolicy.IGNORE
@@ -35,6 +38,8 @@ public interface BookingMapperInterface {
     @Mapping(target = "roomId",source = "roomDetailsDTO.id")
     @Mapping(target = "roomRent",source = "roomDetailsDTO.amount")
     @Mapping(target = "bookingId",source = "booking.id")
+    @Mapping(target = "checkinDateString",source = "booking.checkinDts", qualifiedByName = "formatDate")
+    @Mapping(target = "checkoutDateString",source = "booking.checkoutDts", qualifiedByName = "formatDate")
     @Mapping(target = "statusName",source = "booking.transactionStatus",qualifiedByName = "transactionStatusMapping")
     BookingDTO toRoomDetailsDto(RoomDetailsDTO roomDetailsDTO,Booking booking,Client client);
 
@@ -50,6 +55,13 @@ public interface BookingMapperInterface {
         if(transactionStatus.equals(AppConstants.CANCELLED_STATUS_CODE))
             result = "Cancelled";
         return result;
+    }
+
+
+    @Named("formatDate")
+    default String formatDate(LocalDateTime dateTime) {
+        if (dateTime == null) return null;
+        return dateTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 
 }
