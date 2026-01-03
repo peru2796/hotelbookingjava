@@ -50,7 +50,7 @@ public class BookingController {
         return bookingService.getRoomType();
     }
     @GetMapping("/getRoomUserDetails")
-    public List<BookingDTO> getBookingDTO(@RequestHeader(value = "date",required = false) String date){
+    public List<BookingDTO> getBookingDTO(@RequestHeader(value = "date-filter",required = false) String date){
         String startDate = LocalDate.now().toString()+" 00:00:00";
         String endDate = LocalDate.now().toString()+" 23:59:59";
         if(null != date){
