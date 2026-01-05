@@ -5,6 +5,7 @@ import com.example.demo.dto.RoomDetailsDTO;
 import com.example.demo.entity.Booking;
 import com.example.demo.entity.Client;
 import com.example.demo.util.AppConstants;
+import com.ibm.icu.text.RuleBasedNumberFormat;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -12,6 +13,7 @@ import org.mapstruct.ReportingPolicy;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 @Mapper(
         componentModel = "spring", // lets you @Autowired the mapper
@@ -30,6 +32,7 @@ public interface BookingMapperInterface {
     @Mapping(target = "roomId",source = "roomDetailsDTO.id")
     @Mapping(target = "roomRent",source = "roomDetailsDTO.amount")
     @Mapping(target = "statusName",constant = "Available")
+    @Mapping(target = "totalAmountInWords",source = "roomDetailsDTO.amount",qualifiedByName = "formatTotalAmount")
     BookingDTO toRoomDetailsDto(RoomDetailsDTO roomDetailsDTO);
 
     @Mapping(target = "roomNumber",source = "roomDetailsDTO.roomNumber")
@@ -41,6 +44,7 @@ public interface BookingMapperInterface {
     @Mapping(target = "checkinDateString",source = "booking.checkinDts", qualifiedByName = "formatDate")
     @Mapping(target = "checkoutDateString",source = "booking.checkoutDts", qualifiedByName = "formatDate")
     @Mapping(target = "statusName",source = "booking.transactionStatus",qualifiedByName = "transactionStatusMapping")
+    @Mapping(target = "totalAmountInWords",source = "roomDetailsDTO.amount",qualifiedByName = "formatTotalAmount")
     BookingDTO toRoomDetailsDto(RoomDetailsDTO roomDetailsDTO,Booking booking,Client client);
 
     @Named("transactionStatusMapping")
@@ -62,6 +66,21 @@ public interface BookingMapperInterface {
     default String formatDate(LocalDateTime dateTime) {
         if (dateTime == null) return null;
         return dateTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    }
+
+    @Named("formatTotalAmount")
+    default String formatTotalAmount(Double totalAmount){
+       if(null != totalAmount){
+           int value = (int) Math.floor(totalAmount);
+
+           RuleBasedNumberFormat rbnf =
+                   new RuleBasedNumberFormat(Locale.US, RuleBasedNumberFormat.SPELLOUT);
+
+           return rbnf.format(value);
+
+       }else
+           return null;
+
     }
 
 }

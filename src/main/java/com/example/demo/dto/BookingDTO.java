@@ -68,4 +68,5 @@ public class BookingDTO {
 
     private String  checkinDateString;
     private String  checkoutDateString;
+    private String totalAmountInWords;
 }

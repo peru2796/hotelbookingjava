@@ -22,5 +22,6 @@ public interface RoomDetailsRepository extends JpaRepository<Room,Integer> {
             "WHERE r.floorNumber = f.floorNumber and r.status = 1 and f.status = 1 and rt.id = r.roomType and rt.status =1 ")
     Optional<List<RoomDetailsDTO>> getRoomList();
 
+    long countByStatus(Integer status);
 
 }
