@@ -17,7 +17,7 @@ import java.util.Optional;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
-    @Query("select b from Booking b where (checkinDts between :startDate and :endDate OR checkoutDts between :startDate and :endDate )")
+    @Query("select b from Booking b where (checkinDts between :startDate and :endDate OR checkoutDts between :startDate and :endDate ) AND transactionStatus = 22")
     List<Booking> getRoomDetailsList(LocalDateTime startDate, LocalDateTime endDate);
 
 
@@ -26,5 +26,8 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Query("UPDATE Booking b SET b.comments = :comments,b.checkoutDts =:checkoutDts  WHERE b.id = :id")
     int updateBooking(@Param("id") Long id, @Param("checkoutDts") LocalDateTime checkoutDts, @Param("comments") String comments);
 
-
+    @Modifying
+    @Transactional
+    @Query("UPDATE Booking b SET b.amountPaid = :amountPaid,b.amountRemaining =:amountRemaining, b.transactionStatus =:transactionStatus  WHERE b.id = :id")
+    int checkOutBooking(@Param("id") Long id, @Param("amountPaid") Double amountPaid, @Param("amountRemaining") Double amountRemaining,@Param("transactionStatus") Integer transactionStatus);
 }

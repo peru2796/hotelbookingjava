@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.awt.print.Book;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -53,7 +55,8 @@ public class BookingServiceImpl implements BookingService{
     @Override
     public String createBooking(Booking booking) {
             if(null != booking){
-              booking =   bookingRepository.save(booking);
+                booking.setAmountRemaining(booking.getTotalAmount() - booking.getAmountPaid());
+                booking =   bookingRepository.save(booking);
                if(null != booking.getPaymentHistory()){
                    List<PaymentHistory> paymentHistoryList = booking.getPaymentHistory();
                    Long bookingId = booking.getId();
@@ -154,6 +157,36 @@ public class BookingServiceImpl implements BookingService{
 
         int result = bookingRepository.updateBooking(id, booking.getCheckoutDts(),booking.getComments());
         return "Success";
+    }
+
+    @Override
+    public String checkOutBooking(Long id, Booking booking) {
+        Double d = booking.getTotalAmount() - booking.getAmountPaid();
+        if(d == 0)
+            bookingRepository.checkOutBooking(id,booking.getAmountPaid(),booking.getAmountRemaining(),AppConstants.CHECKOUT_STATUS_CODE);
+        else
+            bookingRepository.checkOutBooking(id,booking.getAmountPaid(),booking.getAmountRemaining(), CHECKED_IN_CODE);
+
+        return "Success";
+    }
+
+    public List<BookingDTO> getListBookingDTO(){
+        String startDate = LocalDate.now().toString()+" 00:00:00";
+        String endDate = LocalDate.now().toString()+" 23:59:59";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        LocalDateTime startDateTime = LocalDateTime.parse(startDate, formatter);
+        LocalDateTime endDateTime = LocalDateTime.parse(endDate, formatter);
+
+        List<Booking> bookingList = bookingRepository.getRoomDetailsList(startDateTime,endDateTime);
+        List<BookingDTO> bookingDTOList = new ArrayList<>();
+
+        bookingList.stream().forEach(booking -> {
+            Client client = clientService.getClientById(booking.getClientId()).get();
+            BookingDTO bookingDTO = bookingMapperInterface.toBookingDto(booking,client);
+            bookingDTOList.add(bookingDTO);
+        });
+        return bookingDTOList;
     }
 
 }

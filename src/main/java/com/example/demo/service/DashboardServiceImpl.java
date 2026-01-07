@@ -31,7 +31,8 @@ public class DashboardServiceImpl implements DashboardService{
     @Autowired
     private BookingRepository bookingRepository;
 
-
+@Autowired
+private BookingService bookingService;
 
     @Autowired
     private RoomDetailsRepository roomDetailsRepository;
@@ -54,9 +55,10 @@ public class DashboardServiceImpl implements DashboardService{
         LocalDateTime startDateTime = LocalDateTime.parse(startDate, formatter);
         LocalDateTime endDateTime = LocalDateTime.parse(endDate, formatter);
 
-      Long noOfAvailableRooms = roomDetailsRepository.countByStatus(1);
+      Long totalRoom = roomDetailsRepository.countByStatus(1);
+      Long noOfAvailableRooms = roomDetailsRepository.getRoomDetailsList(startDateTime,endDateTime).stream().count();
         dashboardDTO.setNoOfAvailableRooms(noOfAvailableRooms);
-      Long noOfOccupiedRooms = noOfAvailableRooms - roomDetailsRepository.getRoomDetailsList(startDateTime,endDateTime).stream().count();
+      Long noOfOccupiedRooms = totalRoom - noOfAvailableRooms;
         dashboardDTO.setNoOfOccupiedRooms(noOfOccupiedRooms);
      List<Booking> bookingList = bookingRepository.getRoomDetailsList(startDateTime,endDateTime);
      Integer revenueToday =  bookingList.stream().filter(x -> x.getCheckinDts().isBefore(LocalDate.now().atTime(23,59,59))).mapToInt(y -> y.getTotalAmount().intValue()).sum();
@@ -67,4 +69,10 @@ public class DashboardServiceImpl implements DashboardService{
     dashboardDTO.setNoOfCheckouts(noOfCheckOuts);
        return dashboardDTO;
     }
+
+    @Override
+    public List<BookingDTO> getBookingListToday(){
+        return bookingService.getListBookingDTO();
+    }
+
 }

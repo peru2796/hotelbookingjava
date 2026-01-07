@@ -26,6 +26,10 @@ public class DashBoardController {
         return new ResponseEntity<>(dashboardService.getBookingAndClientDetailsById(),HttpStatus.OK);
     }
 
+    @GetMapping("/getTodayBooking")
+    public ResponseEntity<List<BookingDTO>> getTodayBookings(){
+        return new ResponseEntity<>(dashboardService.getBookingListToday(),HttpStatus.OK);
+    }
 
 }
 // Full implementation will include CRUD and JWT logic

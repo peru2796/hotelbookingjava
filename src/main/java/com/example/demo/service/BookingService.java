@@ -19,5 +19,7 @@ public interface BookingService {
      BookingDTO getBookingAndClientDetailsById(Long id);
      List<RoomType> getRoomType();
      List<BookingDTO> getRoomDetails(String startDate,String endDate);
-    public String updateBooking(Long id,Booking booking);
+     String updateBooking(Long id,Booking booking);
+    String checkOutBooking(Long id,Booking booking);
+    List<BookingDTO> getListBookingDTO();
 }

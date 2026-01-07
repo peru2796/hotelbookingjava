@@ -49,6 +49,7 @@ public class BookingController {
     public List<RoomType> getRoomType(){
         return bookingService.getRoomType();
     }
+
     @GetMapping("/getRoomUserDetails")
     public List<BookingDTO> getBookingDTO(@RequestHeader(value = "date-filter",required = false) String date){
         String startDate = LocalDate.now().toString()+" 00:00:00";
@@ -66,6 +67,13 @@ public class BookingController {
             @PathVariable Long id, @RequestBody Booking req) {
         String updated = bookingService.updateBooking(id, req);
         return ResponseEntity.ok(new ApiResponse(updated, "Client updated"));
+    }
+
+    @PatchMapping("/checkout/{id}")
+    public ResponseEntity<ApiResponse> checkOutClient(
+            @PathVariable Long id, @RequestBody Booking req) {
+        String updated = bookingService.checkOutBooking(id, req);
+        return ResponseEntity.ok(new ApiResponse(updated, "Checkout completed..."));
     }
 
 }
