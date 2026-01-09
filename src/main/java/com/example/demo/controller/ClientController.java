@@ -5,6 +5,7 @@ import com.example.demo.entity.Booking;
 import com.example.demo.entity.Client;
 import com.example.demo.entity.ClientAttachment;
 import com.example.demo.service.ClientService;
+import com.example.demo.util.AppConstants;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,7 +43,8 @@ public class ClientController {
                 throw new RuntimeException("failed to load the file" ,e);
             }
         }
-        return ResponseEntity.ok(clientService.addClient(client,clientAttachment));
+        Client client1 = clientService.addClient(client,clientAttachment);
+        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.name(), AppConstants.STATUS_SUCCESS));
     }
 
     @GetMapping("/getClientList")
