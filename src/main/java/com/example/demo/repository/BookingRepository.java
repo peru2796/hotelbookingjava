@@ -1,5 +1,6 @@
 package com.example.demo.repository;
 
+import com.example.demo.dto.BarChartResponse;
 import com.example.demo.dto.BookingDTO;
 import com.example.demo.dto.RoomDetailsDTO;
 import com.example.demo.entity.Booking;
@@ -10,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -30,4 +32,26 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Transactional
     @Query("UPDATE Booking b SET b.amountPaid = :amountPaid,b.amountRemaining =:amountRemaining, b.transactionStatus =:transactionStatus  WHERE b.id = :id")
     int checkOutBooking(@Param("id") Long id, @Param("amountPaid") Double amountPaid, @Param("amountRemaining") Double amountRemaining,@Param("transactionStatus") Integer transactionStatus);
+
+
+
+    @Query("""
+        select new com.example.demo.dto.BarChartResponse(FUNCTION('DATE', b.checkinDts), count(b.id))
+        from Booking b
+        where b.checkinDts between :start and :end
+        group by FUNCTION('DATE', b.checkinDts)
+        order by 1
+    """)
+    List<BarChartResponse> countCheckinsByDay(LocalDateTime start, LocalDateTime end);
+
+    // Check-outs per day in range
+    @Query("""
+        select new com.example.demo.dto.BarChartResponse(FUNCTION('DATE', b.checkoutDts), count(b.id))
+        from Booking b
+        where b.checkoutDts between :start and :end
+        group by FUNCTION('DATE', b.checkoutDts)
+        order by 1
+    """)
+    List<BarChartResponse> countCheckoutsByDay(LocalDateTime start, LocalDateTime end);
+
 }

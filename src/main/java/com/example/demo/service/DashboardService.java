@@ -13,4 +13,5 @@ public interface DashboardService {
 
      DashboardDTO getBookingAndClientDetailsById();
     List<BookingDTO> getBookingListToday();
+    List<List<?>> getBarChart(int days);
 }

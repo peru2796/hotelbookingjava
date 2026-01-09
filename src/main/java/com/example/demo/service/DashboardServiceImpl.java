@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.BarChartResponse;
 import com.example.demo.dto.BookingDTO;
 import com.example.demo.dto.DashboardDTO;
 import com.example.demo.dto.RoomDetailsDTO;
@@ -21,9 +22,12 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static com.example.demo.util.AppConstants.BOOKED_STATUS_CODE;
 import static com.example.demo.util.AppConstants.CHECKED_IN_CODE;
+import static java.time.temporal.ChronoUnit.DAYS;
+import static java.util.stream.Stream.iterate;
 
 @Service
 public class DashboardServiceImpl implements DashboardService{
@@ -78,4 +82,49 @@ public class DashboardServiceImpl implements DashboardService{
         return bookingService.getListBookingDTO();
     }
 
+    @Override
+    public List<List<?>> getBarChart(int days) {
+        List<List<?>> resultList = new ArrayList<>();
+
+        String endDate = LocalDate.now().toString()+" 23:59:59";
+        String startDate = LocalDate.now().minusDays(days).toString()+" 00:00:00";
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        LocalDateTime startDateTime = LocalDateTime.parse(startDate, formatter);
+        LocalDateTime endDateTime = LocalDateTime.parse(endDate, formatter);
+
+        List<BarChartResponse>checkInObject = bookingRepository.countCheckinsByDay(startDateTime,endDateTime);
+        List<BarChartResponse>checkOutObject = bookingRepository.countCheckoutsByDay(startDateTime,endDateTime);
+
+        long span = DAYS.between(startDateTime, endDateTime) + 1;
+        DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        List<String> dateList =  Stream.iterate(LocalDate.now().minusDays(days), d -> d.plusDays(1))
+                .limit(span)
+                .toList()
+                .stream()
+                .map(d -> d.format(formatter1))
+                .toList()
+                ;
+        resultList.add(dateList);
+        List<Long> checkInCount = new ArrayList<>();
+        List<Long> checkOutCount = new ArrayList<>();
+        dateList.stream().forEach(x -> {
+         Long n1,n2 = 0L;
+          Optional<BarChartResponse> res = checkInObject.stream().filter(y-> y.getDay().toString().equalsIgnoreCase(x)).findAny();
+            if(res.isPresent())
+                checkInCount.add(res.get().getCnt());
+            else
+                checkInCount.add(0L);
+
+            Optional<BarChartResponse> res1 = checkOutObject.stream().filter(y-> y.getDay().toString().equalsIgnoreCase(x)).findAny();
+            if(res1.isPresent())
+                checkOutCount.add(res1.get().getCnt());
+            else
+                checkOutCount.add(0L);
+        });
+        resultList.add(checkInCount);
+        resultList.add(checkOutCount);
+        return resultList;
+    }
 }

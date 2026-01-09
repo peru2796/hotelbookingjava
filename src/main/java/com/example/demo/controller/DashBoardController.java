@@ -31,5 +31,10 @@ public class DashBoardController {
         return new ResponseEntity<>(dashboardService.getBookingListToday(),HttpStatus.OK);
     }
 
+    @GetMapping("/getBarChart")
+    public ResponseEntity<Object> getBarChart(@RequestHeader(value = "days",required = false) int noOfDays){
+        return new ResponseEntity<>(dashboardService.getBarChart(noOfDays),HttpStatus.OK);
+    }
+
 }
 // Full implementation will include CRUD and JWT logic
