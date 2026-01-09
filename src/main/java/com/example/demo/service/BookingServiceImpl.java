@@ -57,30 +57,37 @@ public class BookingServiceImpl implements BookingService{
             if(null != booking){
                 booking.setAmountRemaining(booking.getTotalAmount() - booking.getAmountPaid());
                 booking =   bookingRepository.save(booking);
-               if(null != booking.getPaymentHistory()){
-                   List<PaymentHistory> paymentHistoryList = booking.getPaymentHistory();
-                   Long bookingId = booking.getId();
-                   Booking finalBooking = booking;
-                   finalBooking.setId(bookingId);
-                   paymentHistoryList.forEach(paymentHistory -> paymentHistory.setBooking(finalBooking));
-                    paymentHistoryRepository.saveAll(paymentHistoryList);
-               }
-               if(null != booking.getTransactionStatus()){
-                 List<BookingHistory> bookingHistoryList = new ArrayList<>();
 
-                   BookingHistory bookingHistory = new BookingHistory();
-                   bookingHistory.setBooking(booking);
-                   bookingHistory.setBookingStatus(BOOKED_STATUS_CODE);
-                   bookingHistoryList.add(bookingHistory);
-
-                   if(booking.getTransactionStatus().equals(CHECKED_IN_CODE)){
-                       BookingHistory bookingHistory1 = new BookingHistory();
-                       bookingHistory1.setBooking(booking);
-                       bookingHistory1.setBookingStatus(CHECKED_IN_CODE);
-                       bookingHistoryList.add(bookingHistory1);
-                   }
-                   bookingHistoryRepository.saveAll(bookingHistoryList);
-               }
+                PaymentHistory paymentHistory = new PaymentHistory();
+                paymentHistory.setBookingId(booking.getId());
+                paymentHistory.setAmount(booking.getAmountPaid());
+                paymentHistory.setBooking(booking);
+                paymentHistory.setStatus(1);
+                paymentHistoryRepository.save(paymentHistory);
+//               if(null != booking.getPaymentHistory()){
+//                   List<PaymentHistory> paymentHistoryList = booking.getPaymentHistory();
+//                   Long bookingId = booking.getId();
+//                   Booking finalBooking = booking;
+//                   finalBooking.setId(bookingId);
+//                   paymentHistoryList.forEach(paymentHistory -> paymentHistory.setBooking(finalBooking));
+//                    paymentHistoryRepository.saveAll(paymentHistoryList);
+//               }
+//               if(null != booking.getTransactionStatus()){
+//                 List<BookingHistory> bookingHistoryList = new ArrayList<>();
+//
+//                   BookingHistory bookingHistory = new BookingHistory();
+//                   bookingHistory.setBooking(booking);
+//                   bookingHistory.setBookingStatus(BOOKED_STATUS_CODE);
+//                   bookingHistoryList.add(bookingHistory);
+//
+//                   if(booking.getTransactionStatus().equals(CHECKED_IN_CODE)){
+//                       BookingHistory bookingHistory1 = new BookingHistory();
+//                       bookingHistory1.setBooking(booking);
+//                       bookingHistory1.setBookingStatus(CHECKED_IN_CODE);
+//                       bookingHistoryList.add(bookingHistory1);
+//                   }
+//                   bookingHistoryRepository.saveAll(bookingHistoryList);
+//               }
             }
             return AppConstants.STATUS_SUCCESS;
     }
@@ -161,11 +168,20 @@ public class BookingServiceImpl implements BookingService{
 
     @Override
     public String checkOutBooking(Long id, Booking booking) {
-        Double d = booking.getTotalAmount() - booking.getAmountPaid();
-        if(d == 0)
-            bookingRepository.checkOutBooking(id,booking.getAmountPaid(),booking.getAmountRemaining(),AppConstants.CHECKOUT_STATUS_CODE);
-        else
-            bookingRepository.checkOutBooking(id,booking.getAmountPaid(),booking.getAmountRemaining(), CHECKED_IN_CODE);
+
+        Booking book = bookingRepository.findById(id).get();
+        PaymentHistory paymentHistory = new PaymentHistory();
+        paymentHistory.setBookingId(id);
+        paymentHistory.setBooking(booking);
+        paymentHistory.setAmount(booking.getAmountPaid()-book.getAmountPaid());
+        paymentHistory.setStatus(1);
+        paymentHistoryRepository.save(paymentHistory);
+
+//        Double d = booking.getTotalAmount() - booking.getAmountPaid();
+//        if(d == 0)
+        bookingRepository.checkOutBooking(id,booking.getAmountPaid(),booking.getAmountRemaining(),AppConstants.CHECKOUT_STATUS_CODE);
+//        else
+//            bookingRepository.checkOutBooking(id,booking.getAmountPaid(),booking.getAmountRemaining(), CHECKED_IN_CODE);
 
         return "Success";
     }
