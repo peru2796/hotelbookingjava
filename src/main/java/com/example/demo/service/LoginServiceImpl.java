@@ -2,8 +2,10 @@ package com.example.demo.service;
 
 import com.example.demo.dto.RoomDetailsDTO;
 import com.example.demo.entity.Client;
+import com.example.demo.entity.Settings;
 import com.example.demo.entity.User;
 import com.example.demo.repository.RoomDetailsRepository;
+import com.example.demo.repository.SettingsRepository;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +27,9 @@ public class LoginServiceImpl implements LoginService {
 
     @Autowired
     private RoomDetailsRepository roomDetailsRepository;
+
+    @Autowired
+    private SettingsRepository settingsRepository;
 
     @Override
     public ResponseEntity<Object> validateLogin(User user) {
@@ -59,6 +64,10 @@ public class LoginServiceImpl implements LoginService {
         getRoomDetails = getRoomDetails.stream().sorted(Comparator.comparing(RoomDetailsDTO::getId))
                 .toList();
         return new ResponseEntity<>(getRoomDetails, HttpStatus.OK);
+    }
+    @Override
+    public List<Settings> getSettingList(){
+        return settingsRepository.findAll();
     }
    
 }

@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.Settings;
 import com.example.demo.entity.User;
+import com.example.demo.repository.SettingsRepository;
 import com.example.demo.service.LoginService;
 import com.example.demo.service.LoginServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4300")
@@ -19,6 +22,7 @@ public class LoginController {
 
     @Autowired
     private LoginService loginService;
+
 
     @GetMapping("/login")
     public ResponseEntity<Object> validateUserLogin(@RequestHeader("userName") String userName, @RequestHeader("password") String password){
@@ -39,10 +43,12 @@ public class LoginController {
         return loginService.getRoomDetails(startDate,endDate);
     }
 
-    @GetMapping("/getStatus")
-    public ResponseEntity<Object> getStatus(){
-        return null;
+    @GetMapping("/getSettingsList")
+    public ResponseEntity<List<Settings>> getStatus(){
+        return ResponseEntity.ok(loginService.getSettingList());
     }
+
+
 
 }
 

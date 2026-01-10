@@ -70,7 +70,7 @@ public class DashboardServiceImpl implements DashboardService{
        Integer revenueToday = paymentHistoryRepository.getPaymentList(startDateTime,endDateTime).stream().mapToInt(x -> x.getAmount().intValue()).sum();
 //     Integer revenueToday =  bookingList.stream().filter(x -> x.getCheckinDts().isBefore(LocalDate.now().atTime(23,59,59))).mapToInt(y -> y.getTotalAmount().intValue()).sum();
     dashboardDTO.setRevenueEarnedToday(revenueToday);
-     Long noOfCheckIns =  bookingList.stream().filter(x -> x.getCheckinDts().isBefore(LocalDate.now().atTime(23,59,59))).toList().stream().count();
+     Long noOfCheckIns =  bookingList.stream().filter(x -> x.getCheckinDts().isBefore(LocalDate.now().atTime(23,59,59)) && x.getCheckinDts().isAfter(LocalDate.now().atTime(00,00,00))).toList().stream().count();
         Long noOfCheckOuts =  bookingList.stream().filter(x -> x.getCheckoutDts().isBefore(LocalDate.now().atTime(23,59,59))).toList().stream().count();
     dashboardDTO.setNoOfCheckins(noOfCheckIns);
     dashboardDTO.setNoOfCheckouts(noOfCheckOuts);

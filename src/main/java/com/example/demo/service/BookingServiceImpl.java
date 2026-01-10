@@ -202,7 +202,8 @@ public class BookingServiceImpl implements BookingService{
             BookingDTO bookingDTO = bookingMapperInterface.toBookingDto(booking,client);
             bookingDTOList.add(bookingDTO);
         });
-        return bookingDTOList;
+        return bookingDTOList.stream().sorted(Comparator.comparing(BookingDTO::getBookingId).reversed())
+                .toList();
     }
 
 }
