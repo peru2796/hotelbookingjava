@@ -169,14 +169,14 @@ public class BookingServiceImpl implements BookingService{
     @Override
     public String checkOutBooking(Booking booking) {
 
-        Booking book = bookingRepository.findById(booking.getId()).get();
+        Booking book = bookingRepository.findById(booking.getBookingId()).get();
         PaymentHistory paymentHistory = new PaymentHistory();
-        paymentHistory.setBookingId(booking.getId());
+        paymentHistory.setBookingId(booking.getBookingId());
         paymentHistory.setBooking(booking);
         paymentHistory.setAmount(booking.getAmountPaid()-book.getAmountPaid());
         paymentHistory.setStatus(1);
         paymentHistoryRepository.save(paymentHistory);
-        bookingRepository.checkOutBooking(booking.getId(),booking.getAmountPaid(),booking.getAmountRemaining(),AppConstants.CHECKOUT_STATUS_CODE);
+        bookingRepository.checkOutBooking(booking.getBookingId(),booking.getAmountPaid(),booking.getAmountRemaining(),AppConstants.CHECKOUT_STATUS_CODE);
         return "Success";
     }
 

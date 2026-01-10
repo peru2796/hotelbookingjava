@@ -58,5 +58,7 @@ public class Booking implements Serializable {
     @OneToOne
     @JoinColumn(name = "id")
     private transient Client c;
+
+    private transient Long bookingId;
 }
 // Full implementation will include CRUD and JWT logic
