@@ -20,6 +20,6 @@ public interface BookingService {
      List<RoomType> getRoomType();
      List<BookingDTO> getRoomDetails(String startDate,String endDate);
      String updateBooking(Long id,Booking booking);
-    String checkOutBooking(Long id,Booking booking);
+    String checkOutBooking(Booking booking);
     List<BookingDTO> getListBookingDTO();
 }

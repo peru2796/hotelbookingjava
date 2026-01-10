@@ -69,10 +69,10 @@ public class BookingController {
         return ResponseEntity.ok(new ApiResponse(updated, "Client updated"));
     }
 
-    @PatchMapping("/checkout/{id}")
+    @PostMapping("/checkout")
     public ResponseEntity<ApiResponse> checkOutClient(
-            @PathVariable Long id, @RequestBody Booking req) {
-        String updated = bookingService.checkOutBooking(id, req);
+            @RequestBody Booking req) {
+        String updated = bookingService.checkOutBooking(req);
         return ResponseEntity.ok(new ApiResponse(updated, "Checkout completed..."));
     }
 
