@@ -168,7 +168,7 @@ public class BookingServiceImpl implements BookingService{
 
     @Override
     public String checkOutBooking(Booking booking) {
-
+        booking.setId(booking.getBookingId());
         Booking book = bookingRepository.findById(booking.getBookingId()).get();
         PaymentHistory paymentHistory = new PaymentHistory();
         paymentHistory.setBookingId(booking.getBookingId());
