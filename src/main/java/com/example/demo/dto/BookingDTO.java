@@ -2,9 +2,6 @@ package com.example.demo.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
-
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Data
@@ -34,7 +31,7 @@ public class BookingDTO {
     private String lastName;
     private String initial;
     private String email;
-
+    private LocalDateTime  todayDts;
 
     private String mobileNumber;
 

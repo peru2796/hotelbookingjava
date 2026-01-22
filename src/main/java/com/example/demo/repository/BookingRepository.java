@@ -22,6 +22,12 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Query("select b from Booking b where (checkinDts between :startDate and :endDate OR checkoutDts between :startDate and :endDate ) AND transactionStatus = 22")
     List<Booking> getRoomDetailsList(LocalDateTime startDate, LocalDateTime endDate);
 
+    @Query("select b from Booking b where (checkinDts between :startDate and :endDate OR checkoutDts between :startDate and :endDate )")
+    List<Booking> getRoomDataList(LocalDateTime startDate, LocalDateTime endDate);
+
+    @Query("select b from Booking b where (checkinDts between :startDate and :endDate )")
+    List<Booking> getTodayRoomDetailsList(LocalDateTime startDate, LocalDateTime endDate);
+
 
     @Modifying
     @Transactional
@@ -30,8 +36,8 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     @Modifying
     @Transactional
-    @Query("UPDATE Booking b SET b.amountPaid = :amountPaid,b.amountRemaining =:amountRemaining, b.transactionStatus =:transactionStatus  WHERE b.id = :id")
-    int checkOutBooking(@Param("id") Long id, @Param("amountPaid") Double amountPaid, @Param("amountRemaining") Double amountRemaining,@Param("transactionStatus") Integer transactionStatus);
+    @Query("UPDATE Booking b SET b.amountPaid = :amountPaid,b.amountRemaining =:amountRemaining, b.transactionStatus =:transactionStatus,b.checkoutDts = :checkoutDts  WHERE b.id = :id")
+    int checkOutBooking(@Param("id") Long id, @Param("amountPaid") Double amountPaid, @Param("amountRemaining") Double amountRemaining,@Param("transactionStatus") Integer transactionStatus,@Param("checkoutDts") LocalDateTime checkoutDts);
 
 
 

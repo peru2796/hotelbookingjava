@@ -151,6 +151,7 @@ public class BookingServiceImpl implements BookingService{
          if(bookingObject.isPresent()){
              Client client = clientService.getClientById(bookingObject.get().getClientId()).get();
              bookingDTO = bookingMapperInterface.toRoomDetailsDto(roomDetails,bookingObject.get(),client);
+             bookingDTO.setTodayDts(LocalDateTime.now());
          }else{
              bookingDTO = bookingMapperInterface.toRoomDetailsDto(roomDetails);
          }
@@ -176,7 +177,7 @@ public class BookingServiceImpl implements BookingService{
         paymentHistory.setAmount(booking.getAmountPaid()-book.getAmountPaid());
         paymentHistory.setStatus(1);
         paymentHistoryRepository.save(paymentHistory);
-        bookingRepository.checkOutBooking(booking.getId(),booking.getAmountPaid(),booking.getAmountRemaining(),AppConstants.CHECKOUT_STATUS_CODE);
+        bookingRepository.checkOutBooking(booking.getId(),booking.getAmountPaid(),booking.getAmountRemaining(),AppConstants.CHECKOUT_STATUS_CODE,booking.getCheckoutDts());
         return "Success";
     }
 
@@ -188,7 +189,7 @@ public class BookingServiceImpl implements BookingService{
         LocalDateTime startDateTime = LocalDateTime.parse(startDate, formatter);
         LocalDateTime endDateTime = LocalDateTime.parse(endDate, formatter);
 
-        List<Booking> bookingList = bookingRepository.getRoomDetailsList(startDateTime,endDateTime);
+        List<Booking> bookingList = bookingRepository.getTodayRoomDetailsList(startDateTime,endDateTime);
         List<BookingDTO> bookingDTOList = new ArrayList<>();
 
         bookingList.stream().forEach(booking -> {

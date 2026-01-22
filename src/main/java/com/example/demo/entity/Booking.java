@@ -55,9 +55,9 @@ public class Booking implements Serializable {
     @JsonManagedReference("booking-history")// FK column in client table
     private List<BookingHistory> bookingHistory = new ArrayList<>();
 
-    @OneToOne
-    @JoinColumn(name = "id")
-    private transient Client c;
+//    @OneToOne
+//    @JoinColumn(name = "id")
+//    private transient Client c;
 
     private transient Long bookingId;
 }

@@ -66,7 +66,7 @@ public class DashboardServiceImpl implements DashboardService{
         dashboardDTO.setNoOfAvailableRooms(noOfAvailableRooms);
       Long noOfOccupiedRooms = totalRoom - noOfAvailableRooms;
         dashboardDTO.setNoOfOccupiedRooms(noOfOccupiedRooms);
-     List<Booking> bookingList = bookingRepository.getRoomDetailsList(startDateTime,endDateTime);
+     List<Booking> bookingList = bookingRepository.getRoomDataList(startDateTime,endDateTime);
        Integer revenueToday = paymentHistoryRepository.getPaymentList(startDateTime,endDateTime).stream().mapToInt(x -> x.getAmount().intValue()).sum();
 //     Integer revenueToday =  bookingList.stream().filter(x -> x.getCheckinDts().isBefore(LocalDate.now().atTime(23,59,59))).mapToInt(y -> y.getTotalAmount().intValue()).sum();
     dashboardDTO.setRevenueEarnedToday(revenueToday);
