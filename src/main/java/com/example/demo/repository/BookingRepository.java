@@ -36,8 +36,9 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     @Modifying
     @Transactional
-    @Query("UPDATE Booking b SET b.amountPaid = :amountPaid,b.amountRemaining =:amountRemaining, b.transactionStatus =:transactionStatus,b.checkoutDts = :checkoutDts  WHERE b.id = :id")
-    int checkOutBooking(@Param("id") Long id, @Param("amountPaid") Double amountPaid, @Param("amountRemaining") Double amountRemaining,@Param("transactionStatus") Integer transactionStatus,@Param("checkoutDts") LocalDateTime checkoutDts);
+    @Query("UPDATE Booking b SET b.amountPaid = :amountPaid,b.amountRemaining =:amountRemaining, b.transactionStatus =:transactionStatus,b.checkoutDts = :checkoutDts,billingId = :billingId,billingNumber = :billingNumber  WHERE b.id = :id")
+    int checkOutBooking(@Param("id") Long id, @Param("amountPaid") Double amountPaid, @Param("amountRemaining") Double amountRemaining,@Param("transactionStatus") Integer transactionStatus,
+                        @Param("checkoutDts") LocalDateTime checkoutDts,@Param("billingId") Long billingId,@Param("billingNumber") String billingNumber);
 
 
 

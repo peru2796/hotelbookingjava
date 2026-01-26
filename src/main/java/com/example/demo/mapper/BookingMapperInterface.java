@@ -2,6 +2,7 @@ package com.example.demo.mapper;
 
 import com.example.demo.dto.BookingDTO;
 import com.example.demo.dto.RoomDetailsDTO;
+import com.example.demo.entity.Billing;
 import com.example.demo.entity.Booking;
 import com.example.demo.entity.Client;
 import com.example.demo.util.AppConstants;
@@ -25,6 +26,7 @@ public interface BookingMapperInterface {
     @Mapping(target = "clientId",source = "client.id")
     @Mapping(target = "statusName",source = "booking.transactionStatus",qualifiedByName = "transactionStatusMapping")
     @Mapping(target = "totalAmountInWords",source = "booking.amountPaid",qualifiedByName = "formatTotalAmount")
+    @Mapping(target = "paymentType",source = "booking.paymentType",qualifiedByName = "formatPaymentType")
     BookingDTO toBookingDto(Booking booking, Client client);
 
     @Mapping(target = "roomNumber",source = "roomDetailsDTO.roomNumber")
@@ -47,6 +49,8 @@ public interface BookingMapperInterface {
     @Mapping(target = "statusName",source = "booking.transactionStatus",qualifiedByName = "transactionStatusMapping")
     @Mapping(target = "totalAmountInWords",source = "roomDetailsDTO.amount",qualifiedByName = "formatTotalAmount")
     BookingDTO toRoomDetailsDto(RoomDetailsDTO roomDetailsDTO,Booking booking,Client client);
+
+    Billing toBooking(Booking booking);
 
     @Named("transactionStatusMapping")
     default String transactionStatusMapping(Integer transactionStatus) {
@@ -83,5 +87,17 @@ public interface BookingMapperInterface {
            return null;
 
     }
+
+    @Named("formatPaymentType")
+    default String formatTotalAmount(String paymentType) {
+        if (null != paymentType) {
+            if (paymentType.equalsIgnoreCase("1"))
+                return "Cash";
+            else
+                return "Online";
+        }
+        return "-";
+    }
+
 
 }

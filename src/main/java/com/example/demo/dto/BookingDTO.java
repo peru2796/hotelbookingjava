@@ -18,6 +18,13 @@ public class BookingDTO {
     private String paymentType;
     private Integer transactionStatus;
 
+    private Long billingId;
+    private String billingNumber;
+
+    private Double baseFare;
+    private Double sgst;
+    private Double cgst;
+
     private LocalDateTime  bookedDts;
 
     private LocalDateTime arrivalDts;

@@ -7,36 +7,40 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "booking")
+@Table(name = "billing")
 @Data
-public class Booking implements Serializable {
+public class Billing  implements Serializable{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String bookingNumber;
+    private Long bookingId;
     private Long roomId;
     private Long roomNumber;
     private Long clientId;
     private Double totalAmount;
     private Double amountPaid;
     private Double amountRemaining;
+    private Double baseFare;
+    private Double sgst;
+    private Double cgst;
     private String paymentType;
     private Integer transactionStatus;
 
-    @CreationTimestamp
+
     private LocalDateTime  bookedDts;
 
-    private LocalDateTime  arrivalDts;
+    @CreationTimestamp
+    private LocalDateTime  billedDts;
 
     private LocalDateTime checkinDts;
     private LocalDateTime  checkoutDts;
-    private LocalDateTime  cancelledtDts;
 
     private String comments;
 
@@ -44,24 +48,9 @@ public class Booking implements Serializable {
     private Integer childrenCount;
     private Integer roomType;
 
-    private Long billingId;
-    private String billingNumber;
-
     @Column(name = "status")
     private Integer status = 1;
     // Getters and Setters
-    @OneToMany(mappedBy = "booking")
-    @JsonManagedReference("booking-payment")// FK column in client table
-    private List<PaymentHistory> paymentHistory = new ArrayList<>();
 
-    @OneToMany(mappedBy = "booking")
-    @JsonManagedReference("booking-history")// FK column in client table
-    private List<BookingHistory> bookingHistory = new ArrayList<>();
-
-//    @OneToOne
-//    @JoinColumn(name = "id")
-//    private transient Client c;
-
-    private transient Long bookingId;
 }
 // Full implementation will include CRUD and JWT logic

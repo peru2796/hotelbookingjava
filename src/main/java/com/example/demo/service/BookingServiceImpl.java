@@ -47,6 +47,12 @@ public class BookingServiceImpl implements BookingService{
     private RoomDetailsRepository roomDetailsRepository;
 
     @Autowired
+    private BillingRepository billingRepository;
+
+    @Autowired
+    private SeqNoGneratorRepository seqNoGneratorRepository;
+
+    @Autowired
     BookingMapper bookingMapper;
 
     @Autowired
@@ -177,8 +183,31 @@ public class BookingServiceImpl implements BookingService{
         paymentHistory.setAmount(booking.getAmountPaid()-book.getAmountPaid());
         paymentHistory.setStatus(1);
         paymentHistoryRepository.save(paymentHistory);
-        bookingRepository.checkOutBooking(booking.getId(),booking.getAmountPaid(),booking.getAmountRemaining(),AppConstants.CHECKOUT_STATUS_CODE,booking.getCheckoutDts());
+       Billing billing = bookingMapperInterface.toBooking(booking);
+        billing.setBookingNumber(billNo());
+        billing.setTransactionStatus(AppConstants.CHECKOUT_STATUS_CODE);
+        setAmountInGst(billing);
+      billing = billingRepository.save(billing);
+        bookingRepository.checkOutBooking(booking.getId(),booking.getAmountPaid(),booking.getAmountRemaining(),
+                AppConstants.CHECKOUT_STATUS_CODE,booking.getCheckoutDts(),billing.getId(),billing.getBookingNumber());
+
         return "Success";
+    }
+
+    private String billNo(){
+      BillingSeqNoGenerator billingSeqNoGenerator = seqNoGneratorRepository.findTopByStatusOrderById(1);
+      billingSeqNoGenerator.setLast_value(billingSeqNoGenerator.getLast_value()+1);
+
+      seqNoGneratorRepository.save(billingSeqNoGenerator);
+
+      return (billingSeqNoGenerator.getLast_value()+1)+"/"+billingSeqNoGenerator.getYear();
+    }
+
+    private void setAmountInGst(Billing billing){
+        double gstAmount = billing.getTotalAmount() * (5.0/100);
+        billing.setBaseFare(billing.getTotalAmount() - gstAmount);
+        billing.setSgst(gstAmount/2);
+        billing.setCgst(gstAmount/2);
     }
 
     public List<BookingDTO> getListBookingDTO(){
