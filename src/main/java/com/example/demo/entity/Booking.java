@@ -47,7 +47,6 @@ public class Booking implements Serializable {
     private Long billingId;
     private String billingNumber;
 
-    private String gstInNo;
 
     @Column(name = "status")
     private Integer status = 1;

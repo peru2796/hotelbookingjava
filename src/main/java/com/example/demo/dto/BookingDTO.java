@@ -30,6 +30,8 @@ public class BookingDTO {
 
     private LocalDateTime arrivalDts;
 
+    private LocalDateTime  billedDts;
+
     private LocalDateTime  checkinDts;
     private LocalDateTime  checkoutDts;
     private LocalDateTime  cancelledtDts;

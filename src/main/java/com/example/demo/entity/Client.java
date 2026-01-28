@@ -39,6 +39,7 @@ public class Client implements Serializable {
     @Column(name = "status")
     private Integer status;
 
+    private String gstInNo;
 
     @OneToOne
     @JoinColumn(name = "id", unique = true) // FK column in client table
