@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -23,6 +24,11 @@ public class BillingController {
     @GetMapping("/getBillingDetailsById")
     public ResponseEntity<BookingDTO> getById(@RequestHeader("id") Long id) {
         return ResponseEntity.ok(billingService.getBillingById(id));
+    }
+
+    @GetMapping("/getGstBillingReport")
+    public ResponseEntity<List<BookingDTO>> getGstBillingReport(@RequestHeader("fromDate") String fromDate, @RequestHeader("toDate") String toDate) {
+        return ResponseEntity.ok(billingService.getGstBillingReport(fromDate,toDate));
     }
 
 

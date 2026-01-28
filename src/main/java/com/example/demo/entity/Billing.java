@@ -33,7 +33,7 @@ public class Billing  implements Serializable{
     private String paymentType;
     private Integer transactionStatus;
 
-
+    private String gstInNo;
     private LocalDateTime  bookedDts;
 
     @CreationTimestamp

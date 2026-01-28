@@ -20,7 +20,7 @@ import java.util.Locale;
         componentModel = "spring", // lets you @Autowired the mapper
         unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
-public interface BookingMapperInterface {
+public interface MapperInterface {
 
     @Mapping(target = "bookingId",source = "booking.id")
     @Mapping(target = "clientId",source = "client.id")
@@ -51,6 +51,14 @@ public interface BookingMapperInterface {
     BookingDTO toRoomDetailsDto(RoomDetailsDTO roomDetailsDTO,Booking booking,Client client);
 
     Billing toBooking(Booking booking);
+
+    @Mapping(target = "bookingId",source = "billing.bookingId")
+    @Mapping(target = "clientId",source = "billing.clientId")
+    @Mapping(target = "billingId",source = "billing.id")
+    @Mapping(target = "statusName",source = "billing.transactionStatus",qualifiedByName = "transactionStatusMapping")
+    @Mapping(target = "totalAmountInWords",source = "billing.amountPaid",qualifiedByName = "formatTotalAmount")
+    @Mapping(target = "paymentType",source = "billing.paymentType",qualifiedByName = "formatPaymentType")
+    BookingDTO toBillingDto(Billing billing, Client client);
 
     @Named("transactionStatusMapping")
     default String transactionStatusMapping(Integer transactionStatus) {

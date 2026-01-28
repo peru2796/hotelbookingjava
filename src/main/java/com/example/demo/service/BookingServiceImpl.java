@@ -4,16 +4,12 @@ import com.example.demo.dto.BookingDTO;
 import com.example.demo.dto.RoomDetailsDTO;
 import com.example.demo.entity.*;
 import com.example.demo.mapper.BookingMapper;
-import com.example.demo.mapper.BookingMapperInterface;
+import com.example.demo.mapper.MapperInterface;
 import com.example.demo.repository.*;
 import com.example.demo.util.AppConstants;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.awt.print.Book;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -21,9 +17,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-
-import static com.example.demo.util.AppConstants.BOOKED_STATUS_CODE;
-import static com.example.demo.util.AppConstants.CHECKED_IN_CODE;
 
 @Service
 public class BookingServiceImpl implements BookingService{
@@ -56,7 +49,7 @@ public class BookingServiceImpl implements BookingService{
     BookingMapper bookingMapper;
 
     @Autowired
-    BookingMapperInterface bookingMapperInterface;
+    MapperInterface mapperInterface;
 
     @Override
     public String createBooking(Booking booking) {
@@ -156,10 +149,10 @@ public class BookingServiceImpl implements BookingService{
           Optional<Booking> bookingObject = bookingList.stream().filter( x -> x.getRoomId().equals(roomDetails.getId())).findFirst();
          if(bookingObject.isPresent()){
              Client client = clientService.getClientById(bookingObject.get().getClientId()).get();
-             bookingDTO = bookingMapperInterface.toRoomDetailsDto(roomDetails,bookingObject.get(),client);
+             bookingDTO = mapperInterface.toRoomDetailsDto(roomDetails,bookingObject.get(),client);
              bookingDTO.setTodayDts(LocalDateTime.now());
          }else{
-             bookingDTO = bookingMapperInterface.toRoomDetailsDto(roomDetails);
+             bookingDTO = mapperInterface.toRoomDetailsDto(roomDetails);
          }
           bookingDTOList.add(bookingDTO);
       });
@@ -183,7 +176,7 @@ public class BookingServiceImpl implements BookingService{
         paymentHistory.setAmount(booking.getAmountPaid()-book.getAmountPaid());
         paymentHistory.setStatus(1);
         paymentHistoryRepository.save(paymentHistory);
-       Billing billing = bookingMapperInterface.toBooking(booking);
+       Billing billing = mapperInterface.toBooking(booking);
         billing.setBookingNumber(billNo());
         billing.setTransactionStatus(AppConstants.CHECKOUT_STATUS_CODE);
         setAmountInGst(billing);
@@ -223,7 +216,7 @@ public class BookingServiceImpl implements BookingService{
 
         bookingList.stream().forEach(booking -> {
             Client client = clientService.getClientById(booking.getClientId()).get();
-            BookingDTO bookingDTO = bookingMapperInterface.toBookingDto(booking,client);
+            BookingDTO bookingDTO = mapperInterface.toBookingDto(booking,client);
             bookingDTOList.add(bookingDTO);
         });
         return bookingDTOList.stream().sorted(Comparator.comparing(BookingDTO::getBookingId).reversed())
