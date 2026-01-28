@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.BookingDTO;
+import com.example.demo.dto.GstReportDTO;
 import com.example.demo.entity.Booking;
 import com.example.demo.entity.RoomType;
 
@@ -12,5 +13,5 @@ public interface BillingService {
 
 
      BookingDTO getBillingById(Long id);
-     List<BookingDTO> getGstBillingReport(String fromDate, String toDate);
+     GstReportDTO getGstBillingReport(String fromDate, String toDate);
 }

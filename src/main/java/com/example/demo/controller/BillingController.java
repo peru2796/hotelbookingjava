@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.ApiResponse;
 import com.example.demo.dto.BookingDTO;
+import com.example.demo.dto.GstReportDTO;
 import com.example.demo.entity.Booking;
 import com.example.demo.entity.RoomType;
 import com.example.demo.service.BillingService;
@@ -27,7 +28,7 @@ public class BillingController {
     }
 
     @GetMapping("/getGstBillingReport")
-    public ResponseEntity<List<BookingDTO>> getGstBillingReport(@RequestHeader("fromDate") String fromDate, @RequestHeader("toDate") String toDate) {
+    public ResponseEntity<GstReportDTO> getGstBillingReport(@RequestHeader("fromDate") String fromDate, @RequestHeader("toDate") String toDate) {
         return ResponseEntity.ok(billingService.getGstBillingReport(fromDate,toDate));
     }
 

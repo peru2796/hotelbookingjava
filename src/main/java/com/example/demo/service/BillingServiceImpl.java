@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.BookingDTO;
+import com.example.demo.dto.GstReportDTO;
 import com.example.demo.entity.*;
 import com.example.demo.mapper.BillingMapper;
 import com.example.demo.mapper.BookingMapper;
@@ -38,8 +39,8 @@ public class BillingServiceImpl implements BillingService {
     }
 
     @Override
-    public List<BookingDTO> getGstBillingReport(String fromDate, String toDate) {
-
+    public GstReportDTO getGstBillingReport(String fromDate, String toDate) {
+        GstReportDTO getReportDTO = new GstReportDTO();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         LocalDateTime fromDateTime = LocalDateTime.parse(fromDate, formatter);
@@ -47,7 +48,12 @@ public class BillingServiceImpl implements BillingService {
         List<Billing> billingList = billingRepository.findByBilledDtsBetween(fromDateTime, toDateTime);
         List<Client> clientList = clientService.getClientList();
         List<RoomType> roomTypeList = roomTypeRepository.findAll();
-        return billingMapper.getBookingDTOFromClientBillingList(billingList, clientList, roomTypeList);
+        getReportDTO.setBookingDTOList(billingMapper.getBookingDTOFromClientBillingList(billingList, clientList, roomTypeList));
+        getReportDTO.setGrantTotal(billingList.stream().filter(x -> x.getTotalAmount() != null).mapToDouble(Billing::getTotalAmount).sum());
+        getReportDTO.setCgstTotal(billingList.stream().filter(x -> x.getCgst() != null).mapToDouble(Billing::getCgst).sum());
+        getReportDTO.setSgstTotal(billingList.stream().filter(x -> x.getSgst() != null).mapToDouble(Billing::getSgst).sum());
+        getReportDTO.setBaseFareTotal(billingList.stream().filter(x -> x.getBaseFare() != null).mapToDouble(Billing::getBaseFare).sum());
+        return getReportDTO;
     }
 
     private void setAmountInGst(BookingDTO billing) {
