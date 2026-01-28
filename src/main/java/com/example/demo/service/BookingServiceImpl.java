@@ -177,12 +177,12 @@ public class BookingServiceImpl implements BookingService{
         paymentHistory.setStatus(1);
         paymentHistoryRepository.save(paymentHistory);
        Billing billing = mapperInterface.toBooking(booking);
-        billing.setBookingNumber(billNo());
+        billing.setBillingNumber(billNo());
         billing.setTransactionStatus(AppConstants.CHECKOUT_STATUS_CODE);
         setAmountInGst(billing);
       billing = billingRepository.save(billing);
         bookingRepository.checkOutBooking(booking.getId(),booking.getAmountPaid(),booking.getAmountRemaining(),
-                AppConstants.CHECKOUT_STATUS_CODE,booking.getCheckoutDts(),billing.getId(),billing.getBookingNumber());
+                AppConstants.CHECKOUT_STATUS_CODE,booking.getCheckoutDts(),billing.getId(),billing.getBillingNumber());
 
         return "Success";
     }

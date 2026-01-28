@@ -19,7 +19,7 @@ public class Billing  implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String bookingNumber;
+    private String billingNumber;
     private Long bookingId;
     private Long roomId;
     private Long roomNumber;
