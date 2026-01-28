@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.ApiResponse;
 import com.example.demo.dto.BookingDTO;
 import com.example.demo.entity.Booking;
+import com.example.demo.entity.RoomServiceOrders;
 import com.example.demo.entity.RoomType;
 import com.example.demo.service.BookingService;
 import com.example.demo.service.BookingServiceImpl;
@@ -76,5 +77,9 @@ public class BookingController {
         return ResponseEntity.ok(new ApiResponse(updated, "Checkout completed..."));
     }
 
+    @PostMapping("/addGuestOrders")
+    public ResponseEntity<String> addRoomServiceOrders(@RequestBody RoomServiceOrders roomServiceOrders){
+        return ResponseEntity.ok(bookingService.addRoomServiceOrders(roomServiceOrders));
+    }
 }
 // Full implementation will include CRUD and JWT logic

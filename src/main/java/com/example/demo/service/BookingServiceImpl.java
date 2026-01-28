@@ -46,6 +46,9 @@ public class BookingServiceImpl implements BookingService{
     private SeqNoGneratorRepository seqNoGneratorRepository;
 
     @Autowired
+    private RoomServiceOrdersRepository roomServiceOrdersRepository;
+
+    @Autowired
     BookingMapper bookingMapper;
 
     @Autowired
@@ -221,6 +224,12 @@ public class BookingServiceImpl implements BookingService{
         });
         return bookingDTOList.stream().sorted(Comparator.comparing(BookingDTO::getBookingId).reversed())
                 .toList();
+    }
+
+    @Override
+    public String addRoomServiceOrders(RoomServiceOrders roomServiceOrders) {
+        roomServiceOrdersRepository.save(roomServiceOrders);
+        return "Success";
     }
 
 }

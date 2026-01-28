@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.dto.BookingDTO;
 import com.example.demo.entity.Booking;
+import com.example.demo.entity.RoomServiceOrders;
 import com.example.demo.entity.RoomType;
 import org.springframework.http.ResponseEntity;
 
@@ -22,4 +23,5 @@ public interface BookingService {
      String updateBooking(Long id,Booking booking);
     String checkOutBooking(Booking booking);
     List<BookingDTO> getListBookingDTO();
+    String addRoomServiceOrders(RoomServiceOrders roomServiceOrders);
 }
