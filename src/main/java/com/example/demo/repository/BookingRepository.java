@@ -3,6 +3,7 @@ package com.example.demo.repository;
 import com.example.demo.dto.BarChartResponse;
 import com.example.demo.dto.BookingDTO;
 import com.example.demo.dto.RoomDetailsDTO;
+import com.example.demo.entity.Billing;
 import com.example.demo.entity.Booking;
 import org.springframework.cglib.core.Local;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -61,4 +62,5 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     """)
     List<BarChartResponse> countCheckoutsByDay(LocalDateTime start, LocalDateTime end);
 
+    List<Booking> findByBookedDtsBetween(LocalDateTime start, LocalDateTime end);
 }

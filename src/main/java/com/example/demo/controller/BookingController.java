@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 public class BookingController {
@@ -29,7 +30,13 @@ public class BookingController {
     }
 
     @GetMapping("/getBookings")
-    public List<BookingDTO> getAll() { return bookingService.getBookingAndClientDetails(); }
+    public List<BookingDTO> getAll(@RequestHeader(value = "fromDate",required = false) String fromDate,@RequestHeader(value = "toDate",required = false) String toDate)
+    {
+        if(Objects.nonNull(fromDate) && Objects.nonNull(toDate))
+            return bookingService.getBookingAndClientDetailsByDateFilter(fromDate,toDate);
+        else
+            return bookingService.getBookingAndClientDetails();
+    }
 
     @GetMapping("/getBookingDetailsById")
     public ResponseEntity<BookingDTO> getById(@RequestHeader("id") Long id) {

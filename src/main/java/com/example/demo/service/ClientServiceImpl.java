@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.awt.print.Book;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -48,6 +50,16 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public List<Client> getClientList() {
         return clientRepository.findAll().stream().sorted(Comparator.comparing(Client::getId).reversed()).toList();
+    }
+
+    @Override
+    public List<Client> getClientListByDateFilter(String fromDate, String toDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        LocalDateTime startDateTime = LocalDateTime.parse(fromDate, formatter);
+        LocalDateTime endDateTime = LocalDateTime.parse(toDate, formatter);
+
+        return clientRepository.findByCreatedDtsBetweenOrderByIdDesc(startDateTime,endDateTime);
     }
 
     @Override

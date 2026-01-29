@@ -232,4 +232,17 @@ public class BookingServiceImpl implements BookingService{
         return "Success";
     }
 
+    @Override
+    public List<BookingDTO> getBookingAndClientDetailsByDateFilter(String fromDate, String toDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        LocalDateTime startDateTime = LocalDateTime.parse(fromDate, formatter);
+        LocalDateTime endDateTime = LocalDateTime.parse(toDate, formatter);
+        List<Booking> bookingList = bookingRepository.findByBookedDtsBetween(startDateTime,endDateTime);
+        List<Client> clientList = clientService.getClientList();
+        List<RoomType> roomTypeList = roomTypeRepository.findAll();
+        return bookingMapper.getBookingDTOFromClientBookingList(bookingList,clientList,roomTypeList);
+
+    }
+
 }

@@ -13,7 +13,7 @@ public interface ClientService {
      Client addClient(Client client, ClientAttachment clientAttachment);
 
      List<Client> getClientList();
-
+    List<Client> getClientListByDateFilter(String fromDate,String toDate);
      Optional<Client> getClientById(Long id);
 
     Optional<Client> getClientByMobileNumber(String mobileNumber);

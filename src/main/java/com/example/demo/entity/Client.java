@@ -3,8 +3,10 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "client")
@@ -40,6 +42,9 @@ public class Client implements Serializable {
     private Integer status;
 
     private String gstInNo;
+
+    @CreationTimestamp
+    private LocalDateTime createdDts;
 
     @OneToOne
     @JoinColumn(name = "id", unique = true) // FK column in client table
