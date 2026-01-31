@@ -91,7 +91,7 @@ public class BookingController {
     }
 
     @GetMapping("/getRoomServiceOrders")
-    public List<RoomServiceOrders> getRoomServiceOrdersByBookingId(Long bookingId){
+    public List<RoomServiceOrders> getRoomServiceOrdersByBookingId(@RequestHeader(value = "bookingId",required = false)Long bookingId){
         return bookingService.getRoomServiceOrderByBookingId(bookingId);
     }
 }

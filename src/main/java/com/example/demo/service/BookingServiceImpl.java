@@ -230,6 +230,7 @@ public class BookingServiceImpl implements BookingService{
 
     @Override
     public String addRoomServiceOrders(RoomServiceOrders roomServiceOrders) {
+        roomServiceOrders.setStatus(1);
         roomServiceOrdersRepository.save(roomServiceOrders);
         return "Success";
     }
