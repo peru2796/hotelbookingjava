@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -57,7 +58,10 @@ public class BookingServiceImpl implements BookingService{
     @Override
     public String createBooking(Booking booking) {
             if(null != booking){
+                long days = ChronoUnit.DAYS.between(booking.getCheckinDts().toLocalDate(), booking.getCheckoutDts().toLocalDate());
+                booking.setTotalAmount(booking.getTotalAmount()*days);
                 booking.setAmountRemaining(booking.getTotalAmount() - booking.getAmountPaid());
+
                 booking =   bookingRepository.save(booking);
 
                 PaymentHistory paymentHistory = new PaymentHistory();
@@ -66,30 +70,6 @@ public class BookingServiceImpl implements BookingService{
                 paymentHistory.setBooking(booking);
                 paymentHistory.setStatus(1);
                 paymentHistoryRepository.save(paymentHistory);
-//               if(null != booking.getPaymentHistory()){
-//                   List<PaymentHistory> paymentHistoryList = booking.getPaymentHistory();
-//                   Long bookingId = booking.getId();
-//                   Booking finalBooking = booking;
-//                   finalBooking.setId(bookingId);
-//                   paymentHistoryList.forEach(paymentHistory -> paymentHistory.setBooking(finalBooking));
-//                    paymentHistoryRepository.saveAll(paymentHistoryList);
-//               }
-//               if(null != booking.getTransactionStatus()){
-//                 List<BookingHistory> bookingHistoryList = new ArrayList<>();
-//
-//                   BookingHistory bookingHistory = new BookingHistory();
-//                   bookingHistory.setBooking(booking);
-//                   bookingHistory.setBookingStatus(BOOKED_STATUS_CODE);
-//                   bookingHistoryList.add(bookingHistory);
-//
-//                   if(booking.getTransactionStatus().equals(CHECKED_IN_CODE)){
-//                       BookingHistory bookingHistory1 = new BookingHistory();
-//                       bookingHistory1.setBooking(booking);
-//                       bookingHistory1.setBookingStatus(CHECKED_IN_CODE);
-//                       bookingHistoryList.add(bookingHistory1);
-//                   }
-//                   bookingHistoryRepository.saveAll(bookingHistoryList);
-//               }
             }
             return AppConstants.STATUS_SUCCESS;
     }
@@ -128,8 +108,9 @@ public class BookingServiceImpl implements BookingService{
     public BookingDTO getBookingAndClientDetailsById(Long id){
         Booking booking = Optional.ofNullable(getBookingDetailsById(id)).get();
         Client client = clientService.getClientById(booking.getClientId()).get();
+        List<RoomServiceOrders> roomServiceOrdersList = getRoomServiceOrderByBookingId(booking.getId());
         List<RoomType> roomTypeList = roomTypeRepository.findAll();
-        return bookingMapper.getBookingDTOFromClientBooking(booking,client,roomTypeList);
+        return bookingMapper.getBookingDTOFromClientBooking(booking,client,roomTypeList,roomServiceOrdersList);
     }
 
     @Override

@@ -64,5 +64,7 @@ public class Booking implements Serializable {
 //    private transient Client c;
 
     private transient Long bookingId;
+
+    private transient Double sumOfTotalPlusOrderSummary;
 }
 // Full implementation will include CRUD and JWT logic

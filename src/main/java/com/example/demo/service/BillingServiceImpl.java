@@ -5,6 +5,7 @@ import com.example.demo.dto.GstReportDTO;
 import com.example.demo.entity.*;
 import com.example.demo.mapper.BillingMapper;
 import com.example.demo.mapper.BookingMapper;
+import com.example.demo.mapper.MapperInterface;
 import com.example.demo.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,10 +32,15 @@ public class BillingServiceImpl implements BillingService {
     @Autowired
     BillingMapper billingMapper;
 
+    @Autowired
+    MapperInterface mapperInterface;
+
     @Override
     public BookingDTO getBillingById(Long id) {
         BookingDTO bookingDTO = bookingService.getBookingAndClientDetailsById(id);
         setAmountInGst(bookingDTO);
+        bookingDTO.setTotalAmountInWords(mapperInterface.formatTotalAmount(bookingDTO.getAmountPaid()+bookingDTO.getMiscellaneousCharge()));
+        bookingDTO.setTotalAmount(bookingDTO.getAmountPaid()+bookingDTO.getMiscellaneousCharge());
         return bookingDTO;
     }
 

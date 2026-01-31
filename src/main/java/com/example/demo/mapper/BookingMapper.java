@@ -3,6 +3,7 @@ package com.example.demo.mapper;
 import com.example.demo.dto.BookingDTO;
 import com.example.demo.entity.Booking;
 import com.example.demo.entity.Client;
+import com.example.demo.entity.RoomServiceOrders;
 import com.example.demo.entity.RoomType;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +34,11 @@ public class BookingMapper {
                 .toList();
     }
 
-    public BookingDTO getBookingDTOFromClientBooking(Booking booking, Client client, List<RoomType> roomTypeList){
-
+    public BookingDTO getBookingDTOFromClientBooking(Booking booking, Client client, List<RoomType> roomTypeList, List<RoomServiceOrders> roomServiceOrdersList){
             BookingDTO bookingDTO = mapperInterface.toBookingDto(booking,client);
             Optional<RoomType> roomType = roomTypeList.stream().filter(roomTy -> roomTy.getId().equals(booking.getRoomType())).findFirst();
             roomType.ifPresent(type -> bookingDTO.setRoomTypeName(type.getRoomType()));
-
+            bookingDTO.setMiscellaneousCharge(roomServiceOrdersList.stream().mapToDouble(RoomServiceOrders::getOrderValue).sum());
         return bookingDTO;
     }
 }
