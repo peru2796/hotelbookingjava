@@ -153,7 +153,7 @@ public class BookingServiceImpl implements BookingService{
          if(bookingObject.isPresent()){
              Client client = clientService.getClientById(bookingObject.get().getClientId()).get();
              bookingDTO = mapperInterface.toRoomDetailsDto(roomDetails,bookingObject.get(),client);
-             List<RoomServiceOrders> roomServiceOrdersList = roomServiceOrdersRepository.findByBookingId(bookingObject.get().getId());
+             List<RoomServiceOrders> roomServiceOrdersList = getRoomServiceOrderByBookingId(bookingObject.get().getBookingId());
              bookingDTO.setMiscellaneousCharge(roomServiceOrdersList.stream().mapToDouble(RoomServiceOrders::getOrderValue).sum());
              bookingDTO.setTodayDts(LocalDateTime.now());
          }else{
@@ -247,4 +247,8 @@ public class BookingServiceImpl implements BookingService{
 
     }
 
+    @Override
+    public List<RoomServiceOrders> getRoomServiceOrderByBookingId(Long bookingId){
+        return roomServiceOrdersRepository.findByBookingId(bookingId);
+    }
 }

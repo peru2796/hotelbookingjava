@@ -7,6 +7,7 @@ import com.example.demo.entity.RoomServiceOrders;
 import com.example.demo.entity.RoomType;
 import com.example.demo.service.BookingService;
 import com.example.demo.service.BookingServiceImpl;
+import com.example.demo.util.AppConstants;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -86,7 +87,12 @@ public class BookingController {
 
     @PostMapping("/addGuestOrders")
     public ResponseEntity<ApiResponse> addRoomServiceOrders(@RequestBody RoomServiceOrders roomServiceOrders){
-        return ResponseEntity.ok(new ApiResponse("200 OK",bookingService.addRoomServiceOrders(roomServiceOrders)));
+        return ResponseEntity.ok(new ApiResponse(AppConstants.STATUS_SUCCESS,bookingService.addRoomServiceOrders(roomServiceOrders)));
+    }
+
+    @GetMapping("/getRoomServiceOrders")
+    public List<RoomServiceOrders> getRoomServiceOrdersByBookingId(Long bookingId){
+        return bookingService.getRoomServiceOrderByBookingId(bookingId);
     }
 }
 // Full implementation will include CRUD and JWT logic
