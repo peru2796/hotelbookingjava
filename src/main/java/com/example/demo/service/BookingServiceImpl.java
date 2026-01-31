@@ -153,7 +153,7 @@ public class BookingServiceImpl implements BookingService{
          if(bookingObject.isPresent()){
              Client client = clientService.getClientById(bookingObject.get().getClientId()).get();
              bookingDTO = mapperInterface.toRoomDetailsDto(roomDetails,bookingObject.get(),client);
-             List<RoomServiceOrders> roomServiceOrdersList = getRoomServiceOrderByBookingId(bookingObject.get().getBookingId());
+             List<RoomServiceOrders> roomServiceOrdersList = getRoomServiceOrderByBookingId(bookingObject.get().getId());
              bookingDTO.setMiscellaneousCharge(roomServiceOrdersList.stream().mapToDouble(RoomServiceOrders::getOrderValue).sum());
              bookingDTO.setTodayDts(LocalDateTime.now());
          }else{

@@ -20,10 +20,11 @@ import java.util.Optional;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
-    @Query("select b from Booking b where (checkinDts between :startDate and :endDate OR checkoutDts between :startDate and :endDate ) AND transactionStatus = 22")
-    List<Booking> getRoomDetailsList(LocalDateTime startDate, LocalDateTime endDate);
+//    @Query("select b from Booking b where (checkinDts between :startDate and :endDate OR checkoutDts between :startDate and :endDate ) AND transactionStatus = 22")
+    @Query("select b from Booking b where ((:startDate BETWEEN checkinDts AND checkoutDts) OR  (checkinDts between :startDate and :endDate OR checkoutDts between :startDate and :endDate )) AND transactionStatus = 22")
+    List<Booking> getRoomDetailsList(LocalDateTime startDate ,LocalDateTime endDate);
 
-    @Query("select b from Booking b where (checkinDts between :startDate and :endDate OR checkoutDts between :startDate and :endDate )")
+    @Query("select b from Booking b where ((:startDate BETWEEN checkinDts AND checkoutDts) OR  (checkinDts between :startDate and :endDate OR checkoutDts between :startDate and :endDate ))")
     List<Booking> getRoomDataList(LocalDateTime startDate, LocalDateTime endDate);
 
     @Query("select b from Booking b where (checkinDts between :startDate and :endDate )")
