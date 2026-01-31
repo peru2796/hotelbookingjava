@@ -15,5 +15,6 @@ import java.util.List;
 
 public interface RoomServiceOrdersRepository extends JpaRepository<RoomServiceOrders, Long> {
 
+    List<RoomServiceOrders> findByBookingId(Long bookingId);
 
 }

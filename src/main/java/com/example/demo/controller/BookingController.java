@@ -85,8 +85,8 @@ public class BookingController {
     }
 
     @PostMapping("/addGuestOrders")
-    public ResponseEntity<String> addRoomServiceOrders(@RequestBody RoomServiceOrders roomServiceOrders){
-        return ResponseEntity.ok(bookingService.addRoomServiceOrders(roomServiceOrders));
+    public ResponseEntity<ApiResponse> addRoomServiceOrders(@RequestBody RoomServiceOrders roomServiceOrders){
+        return ResponseEntity.ok(new ApiResponse("200 OK",bookingService.addRoomServiceOrders(roomServiceOrders)));
     }
 }
 // Full implementation will include CRUD and JWT logic

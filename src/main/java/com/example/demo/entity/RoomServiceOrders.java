@@ -28,7 +28,7 @@ public class RoomServiceOrders implements Serializable {
     private String orderName;
 
     @Column
-    private String orderValue;
+    private Double orderValue;
 
     @Column(name = "status")
     private Integer status =1;

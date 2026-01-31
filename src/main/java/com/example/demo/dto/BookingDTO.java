@@ -17,6 +17,7 @@ public class BookingDTO {
     private Double amountRemaining;
     private String paymentType;
     private Integer transactionStatus;
+    private Double miscellaneousCharge;
 
     private String gstInNo;
     private Long billingId;
