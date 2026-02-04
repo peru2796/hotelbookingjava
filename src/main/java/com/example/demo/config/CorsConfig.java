@@ -10,7 +10,8 @@ public class CorsConfig implements WebMvcConfigurer{
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins(
-                        "http://localhost:4300/"
+                        "http://localhost:4300/",
+                        "https://hotelbookinguifinal.vercel.app/"
                 )
                 .allowedMethods("GET", "POST")
                 .allowedHeaders("Content-Type", "Authorization", "X-Requested-With")
