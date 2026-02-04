@@ -14,8 +14,6 @@ public class CorsConfig implements WebMvcConfigurer{
                         "https://hotelbookinguifinal.vercel.app/"
                 )
                 .allowedMethods("GET", "POST")
-                .allowedHeaders("Content-Type", "Authorization", "X-Requested-With")
-                .exposedHeaders("X-Total-Count") // if needed
                 .allowCredentials(true)
                 .maxAge(3600);
     }
