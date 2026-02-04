@@ -38,6 +38,7 @@ public class ClientServiceImpl implements ClientService {
     public Client addClient(Client client, ClientAttachment clientAttachment) {
 
             client.setStatus(1);
+            client.setCreatedDts(LocalDateTime.now());
             Client c = clientRepository.save(client);
             if(null != clientAttachment){
                 clientAttachment.setClientId(c.getId());

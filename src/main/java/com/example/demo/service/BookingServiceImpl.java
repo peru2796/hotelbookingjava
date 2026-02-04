@@ -101,6 +101,7 @@ public class BookingServiceImpl implements BookingService{
         List<Booking> bookingList = getBookingList();
         List<Client> clientList = clientService.getClientList();
         List<RoomType> roomTypeList = roomTypeRepository.findAll();
+
        return bookingMapper.getBookingDTOFromClientBookingList(bookingList,clientList,roomTypeList);
     }
 

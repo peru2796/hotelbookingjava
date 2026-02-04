@@ -34,6 +34,9 @@ public class Booking implements Serializable {
 
     private LocalDateTime  arrivalDts;
 
+    @CreationTimestamp
+    private LocalDateTime  createdDts;
+
     private LocalDateTime checkinDts;
     private LocalDateTime  checkoutDts;
     private LocalDateTime  cancelledtDts;

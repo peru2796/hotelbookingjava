@@ -6,6 +6,7 @@ import com.example.demo.entity.Client;
 import com.example.demo.entity.RoomServiceOrders;
 import com.example.demo.entity.RoomType;
 
+import com.example.demo.service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,13 +21,17 @@ public class BookingMapper {
     @Autowired
     MapperInterface mapperInterface;
 
+    @Autowired
+    BookingService bookingService;
+
     public List<BookingDTO> getBookingDTOFromClientBookingList(List<Booking> bookingList, List<Client> clientList, List<RoomType> roomTypeList){
        List<BookingDTO> bookingDTOList = new ArrayList<>();
         bookingList.forEach(booking -> {
-
+            List<RoomServiceOrders> roomServiceOrdersList = bookingService.getRoomServiceOrderByBookingId(booking.getId());
             Optional<Client> client = clientList.stream().filter(c -> c.getId().equals(booking.getClientId())).findFirst();
             Optional<RoomType> roomType = roomTypeList.stream().filter(roomTy -> roomTy.getId().equals(booking.getRoomType())).findFirst();
             BookingDTO bookingDTO = mapperInterface.toBookingDto(booking,client.get());
+            bookingDTO.setMiscellaneousCharge(roomServiceOrdersList.stream().mapToDouble(RoomServiceOrders::getOrderValue).sum());
             roomType.ifPresent(type -> bookingDTO.setRoomTypeName(type.getRoomType()));
             bookingDTOList.add(bookingDTO);
         });

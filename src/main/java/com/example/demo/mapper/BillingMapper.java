@@ -29,8 +29,7 @@ public class BillingMapper {
             roomType.ifPresent(type -> bookingDTO.setRoomTypeName(type.getRoomType()));
             bookingDTOList.add(bookingDTO);
         });
-        return bookingDTOList.stream().sorted(Comparator.comparing(BookingDTO::getBookingId).reversed())
-                .toList();
+        return bookingDTOList;
     }
 
     public BookingDTO getBookingDTOFromClientBooking(Booking booking, Client client, List<RoomType> roomTypeList){
