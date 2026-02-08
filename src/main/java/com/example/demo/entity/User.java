@@ -31,10 +31,14 @@ public class User implements Serializable {
     private String middleName;
 
     @Column(nullable = false)
-    private String password;// Encrypted using BCrypt
+    private String password; // Encrypted using BCrypt
+
+    private Integer userRoleCode;
 
     @Column(name = "status")
     private Integer status;
     // Getters and Setters
+
+    private transient String userRoleName;
 }
 // Full implementation will include CRUD and JWT logic

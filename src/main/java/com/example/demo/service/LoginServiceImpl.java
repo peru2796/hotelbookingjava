@@ -4,9 +4,11 @@ import com.example.demo.dto.RoomDetailsDTO;
 import com.example.demo.entity.Client;
 import com.example.demo.entity.Settings;
 import com.example.demo.entity.User;
+import com.example.demo.entity.UserRole;
 import com.example.demo.repository.RoomDetailsRepository;
 import com.example.demo.repository.SettingsRepository;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.repository.UserRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,9 @@ public class LoginServiceImpl implements LoginService {
     private UserRepository userRepository;
 
     @Autowired
+    private UserRoleRepository userRoleRepository;
+
+    @Autowired
     private RoomDetailsRepository roomDetailsRepository;
 
     @Autowired
@@ -38,6 +43,7 @@ public class LoginServiceImpl implements LoginService {
         if(userOptional.isPresent()){
             if(user.getPassword().equalsIgnoreCase(userOptional.get().getPassword())) {
                 outputObject.put("login-status", "Success");
+                userOptional.get().setUserRoleName(userRoleRepository.findById(Long.valueOf(userOptional.get().getUserRoleCode())).map(UserRole::getUserRoleName).get());
                 outputObject.put("userObj", userOptional.get());
             }else{
                 outputObject.put("login-status", "Failure");

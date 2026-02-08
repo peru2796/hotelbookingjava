@@ -22,7 +22,7 @@ public class DashBoardController {
     private DashboardService dashboardService;
 
     @GetMapping("/getDashboardservice")
-    public ResponseEntity<DashboardDTO> getDashboardservice() {
+    public ResponseEntity<DashboardDTO> getDashboardService() {
         return new ResponseEntity<>(dashboardService.getBookingAndClientDetailsById(),HttpStatus.OK);
     }
 

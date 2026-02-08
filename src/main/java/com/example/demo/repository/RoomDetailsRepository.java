@@ -14,11 +14,11 @@ import java.util.Optional;
 public interface RoomDetailsRepository extends JpaRepository<Room,Integer> {
 
     @Query("select new com.example.demo.dto.RoomDetailsDTO(r.roomNumber,r.roomName,f.floorNumber,f.floorName,r.id,rt.roomType,rt.amount,rt.id as roomId) from Room r,Floor f,RoomType rt " +
-            "WHERE r.floorNumber = f.floorNumber and r.status = 1 and f.status = 1 and rt.id = r.roomType and rt.status =1 and r.id NOT IN (select roomId from Booking where (checkinDts between :startDate and :endDate OR checkoutDts between :startDate and :endDate ) and transactionStatus not in (24,26))")
+            "WHERE r.floorNumber = f.floorNumber and r.status = 1 and f.status = 1 and rt.id = r.roomType and rt.status =1 and r.id NOT IN (select roomId from Booking where ((:startDate BETWEEN checkinDts AND checkoutDts) OR  (checkinDts between :startDate and :endDate OR checkoutDts between :startDate and :endDate )) and transactionStatus not in (24,26))")
     List<RoomDetailsDTO> getRoomDetailsList(LocalDateTime startDate, LocalDateTime endDate);
 
     @Query("select new com.example.demo.dto.RoomDetailsDTO(r.roomNumber,r.roomName,f.floorNumber,f.floorName,r.id,rt.roomType,rt.amount,rt.id as roomId) from Room r,Floor f,RoomType rt " +
-            "WHERE r.floorNumber = f.floorNumber and r.status = 1 and f.status = 1 and rt.id = r.roomType and rt.status =1 and r.id NOT IN (select roomId from Booking where (checkinDts between :startDate and :endDate OR checkoutDts between :startDate and :endDate ))")
+            "WHERE r.floorNumber = f.floorNumber and r.status = 1 and f.status = 1 and rt.id = r.roomType and rt.status =1 and r.id NOT IN (select roomId from Booking where ((:startDate BETWEEN checkinDts AND checkoutDts) OR  (checkinDts between :startDate and :endDate OR checkoutDts between :startDate and :endDate )))")
     List<RoomDetailsDTO> getDashBoardRoomData(LocalDateTime startDate, LocalDateTime endDate);
 
     @Query("select new com.example.demo.dto.RoomDetailsDTO(r.roomNumber,r.roomName,f.floorNumber,f.floorName,r.id,rt.roomType,rt.amount,rt.id as roomId) from Room r," +

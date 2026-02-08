@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -29,12 +30,10 @@ public class Booking implements Serializable {
     private String paymentType;
     private Integer transactionStatus;
 
-    @CreationTimestamp
     private LocalDateTime  bookedDts;
 
     private LocalDateTime  arrivalDts;
 
-    @CreationTimestamp
     private LocalDateTime  createdDts;
 
     private LocalDateTime checkinDts;

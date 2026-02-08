@@ -14,10 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class BookingServiceImpl implements BookingService{
@@ -60,13 +57,18 @@ public class BookingServiceImpl implements BookingService{
             if(null != booking){
                 long days = ChronoUnit.DAYS.between(booking.getCheckinDts().toLocalDate(), booking.getCheckoutDts().toLocalDate());
                 booking.setTotalAmount(booking.getTotalAmount()*days);
+                Optional<Booking> optionalBooking = bookingRepository.findById(Objects.isNull(booking.getId())?-1:booking.getId());
                 booking.setAmountRemaining(booking.getTotalAmount() - booking.getAmountPaid());
-
+                booking.setBookedDts(LocalDateTime.now());
+                booking.setCreatedDts(LocalDateTime.now());
                 booking =   bookingRepository.save(booking);
 
                 PaymentHistory paymentHistory = new PaymentHistory();
                 paymentHistory.setBookingId(booking.getId());
-                paymentHistory.setAmount(booking.getAmountPaid());
+                if(optionalBooking.isPresent())
+                    paymentHistory.setAmount(optionalBooking.get().getAmountPaid() - booking.getAmountPaid());
+                else
+                    paymentHistory.setAmount(booking.getAmountPaid());
                 paymentHistory.setBooking(booking);
                 paymentHistory.setStatus(1);
                 paymentHistoryRepository.save(paymentHistory);
