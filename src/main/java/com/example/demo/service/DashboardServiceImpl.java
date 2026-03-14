@@ -90,7 +90,7 @@ public class DashboardServiceImpl implements DashboardService{
         List<BarChartResponse>checkOutObject = bookingRepository.countCheckoutsByDay(startDateTime,endDateTime);
 
         long span = DAYS.between(startDateTime, endDateTime) + 1;
-        DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         List<String> dateList =  Stream.iterate(LocalDate.now().minusDays(days), d -> d.plusDays(1))
                 .limit(span)
                 .toList()
