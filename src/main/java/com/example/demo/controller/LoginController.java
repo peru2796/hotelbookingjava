@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.Room;
+import com.example.demo.entity.RoomType;
 import com.example.demo.entity.Settings;
 import com.example.demo.entity.User;
 import com.example.demo.repository.SettingsRepository;
@@ -48,6 +50,10 @@ public class LoginController {
         return ResponseEntity.ok(loginService.getSettingList());
     }
 
+    @GetMapping("/getRoomTypeList")
+    public ResponseEntity<List<RoomType>> getRoomTypeList(){
+        return ResponseEntity.ok(loginService.getRoomTypeList());
+    }
 
 
 }

@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.entity.RoomType;
 import com.example.demo.entity.Settings;
 import com.example.demo.entity.User;
 import org.springframework.http.ResponseEntity;
@@ -13,4 +14,5 @@ public interface LoginService {
     ResponseEntity<Object> validateLogin(User user);
     ResponseEntity<Object> getRoomDetails(String startDate,String endDate);
     List<Settings> getSettingList();
+    List<RoomType> getRoomTypeList();
 }
