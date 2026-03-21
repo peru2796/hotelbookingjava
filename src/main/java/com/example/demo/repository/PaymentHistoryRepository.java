@@ -15,4 +15,6 @@ public interface PaymentHistoryRepository extends JpaRepository<PaymentHistory, 
 
     @Query("select b from PaymentHistory b where createdDts between :startDate and :endDate ")
     List<PaymentHistory> getPaymentList(LocalDateTime startDate, LocalDateTime endDate);
+
+    List<PaymentHistory> findByBookingId(Long bookingId);
 }

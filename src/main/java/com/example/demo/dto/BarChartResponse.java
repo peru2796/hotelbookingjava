@@ -3,22 +3,31 @@ package com.example.demo.dto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 @Data
 @NoArgsConstructor
 public class BarChartResponse {
-    private Object day;
-    private Long cnt;
+    private String date;
+    private Long count;
 
-    public BarChartResponse(Object day, Long cnt) {
-        this.day = day;
-        this.cnt = cnt;
+    public BarChartResponse(LocalDate date, Long count) {
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        this.date  = date.format(fmt);   // ✅ Format here
+        this.count = count;
+    }
+
+    // ✅ Accept Object — handles any type JPQL returns
+    public BarChartResponse(Object date, Long count) {
+        this.date  = date != null ? date.toString() : "";
+        this.count = count;
     }
 
 
-    public Object getDay() { return day; }
-    public void setDay(Object day) { this.day = day; }
-    public Long getCnt() { return cnt; }
-    public void setCnt(Long cnt) { this.cnt = cnt; }
+    public Object getDate() { return date; }
+
+    public Long getCount() { return count; }
 
     // getters & setters
 }

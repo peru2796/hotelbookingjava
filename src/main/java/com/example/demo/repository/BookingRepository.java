@@ -45,21 +45,21 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
 
     @Query("""
-        select new com.example.demo.dto.BarChartResponse(FUNCTION('DATE', b.checkinDts), count(b.id))
+        select new com.example.demo.dto.BarChartResponse(to_char(b.checkinDts, 'DD-MM-YYYY'), count(b.id))
         from Booking b
         where b.checkinDts between :start and :end
-        group by FUNCTION('DATE', b.checkinDts)
-        order by 1
+        group by to_char(b.checkinDts, 'DD-MM-YYYY')
+        order by to_char(b.checkinDts, 'DD-MM-YYYY')
     """)
     List<BarChartResponse> countCheckinsByDay(LocalDateTime start, LocalDateTime end);
 
     // Check-outs per day in range
     @Query("""
-        select new com.example.demo.dto.BarChartResponse(FUNCTION('DATE', b.checkoutDts), count(b.id))
+        select new com.example.demo.dto.BarChartResponse(to_char(b.checkoutDts, 'DD-MM-YYYY'), count(b.id))
         from Booking b
         where b.checkoutDts between :start and :end
-        group by FUNCTION('DATE', b.checkoutDts)
-        order by 1
+        group by to_char(b.checkoutDts, 'DD-MM-YYYY')
+        order by to_char(b.checkoutDts, 'DD-MM-YYYY')
     """)
     List<BarChartResponse> countCheckoutsByDay(LocalDateTime start, LocalDateTime end);
 

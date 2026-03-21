@@ -34,6 +34,7 @@ public class BookingServiceImpl implements BookingService{
     @Autowired
     private RoomTypeRepository roomTypeRepository;
 
+
     @Autowired
     private RoomDetailsRepository roomDetailsRepository;
 
@@ -56,22 +57,29 @@ public class BookingServiceImpl implements BookingService{
     public String createBooking(Booking booking) {
             if(null != booking){
                 long days = ChronoUnit.DAYS.between(booking.getCheckinDts().toLocalDate(), booking.getCheckoutDts().toLocalDate());
-                booking.setTotalAmount(booking.getTotalAmount()*days);
+                Optional<RoomType> roomType = roomTypeRepository.findById(Math.toIntExact(booking.getRoomId()));
+                days = days == 0? 1:days;
+                booking.setTotalAmount(roomType.get().getAmount()*days);
                 Optional<Booking> optionalBooking = bookingRepository.findById(Objects.isNull(booking.getId())?-1:booking.getId());
                 booking.setAmountRemaining(booking.getTotalAmount() - booking.getAmountPaid());
                 booking.setBookedDts(LocalDateTime.now());
                 booking.setCreatedDts(LocalDateTime.now());
                 booking =   bookingRepository.save(booking);
-
-                PaymentHistory paymentHistory = new PaymentHistory();
-                paymentHistory.setBookingId(booking.getId());
-                if(optionalBooking.isPresent())
-                    paymentHistory.setAmount(optionalBooking.get().getAmountPaid() - booking.getAmountPaid());
-                else
-                    paymentHistory.setAmount(booking.getAmountPaid());
-                paymentHistory.setBooking(booking);
-                paymentHistory.setStatus(1);
-                paymentHistoryRepository.save(paymentHistory);
+                List<PaymentHistory> paymentHistories = paymentHistoryRepository.findByBookingId(booking.getId());
+                Double totalAmount = paymentHistories.stream()
+                        .mapToDouble(PaymentHistory::getAmount)
+                        .sum();
+                if(!totalAmount.equals(booking.getAmountPaid())){
+                    PaymentHistory paymentHistory = new PaymentHistory();
+                    paymentHistory.setBookingId(booking.getId());
+                    if(optionalBooking.isPresent())
+                        paymentHistory.setAmount( booking.getAmountPaid() - totalAmount);
+                    else
+                        paymentHistory.setAmount(booking.getAmountPaid());
+                    paymentHistory.setBooking(booking);
+                    paymentHistory.setStatus(1);
+                    paymentHistoryRepository.save(paymentHistory);
+                }
             }
             return AppConstants.STATUS_SUCCESS;
     }
@@ -129,6 +137,8 @@ public class BookingServiceImpl implements BookingService{
         LocalDateTime endDateTime = LocalDateTime.parse(endDate, formatter);
 
       List<RoomDetailsDTO> roomDetailsDTOList =  roomDetailsRepository.getRoomList().get();
+      List<RoomType> roomTypeList = roomTypeRepository.findAll();
+
       List<Booking> bookingList = bookingRepository.getRoomDetailsList(startDateTime,endDateTime);
       List<BookingDTO> bookingDTOList = new ArrayList<>();
       roomDetailsDTOList.forEach(roomDetails ->{
@@ -136,7 +146,10 @@ public class BookingServiceImpl implements BookingService{
           Optional<Booking> bookingObject = bookingList.stream().filter( x -> x.getRoomId().equals(roomDetails.getId())).findFirst();
          if(bookingObject.isPresent()){
              Client client = clientService.getClientById(bookingObject.get().getClientId()).get();
-             bookingDTO = mapperInterface.toRoomDetailsDto(roomDetails,bookingObject.get(),client);
+            Optional<RoomType> roomTypeOptional = roomTypeList.stream().filter(x -> x.getId().equals(bookingObject.get().getRoomType())).findFirst();
+
+            bookingDTO = mapperInterface.toRoomDetailsDto(roomDetails,bookingObject.get(),client);
+            bookingDTO.setRoomTypeName(roomTypeOptional.get().getRoomType());
              List<RoomServiceOrders> roomServiceOrdersList = getRoomServiceOrderByBookingId(bookingObject.get().getId());
              bookingDTO.setMiscellaneousCharge(roomServiceOrdersList.stream().mapToDouble(RoomServiceOrders::getOrderValue).sum());
              bookingDTO.setTodayDts(LocalDateTime.now());
@@ -182,7 +195,7 @@ public class BookingServiceImpl implements BookingService{
 
       seqNoGneratorRepository.save(billingSeqNoGenerator);
 
-      return (billingSeqNoGenerator.getLast_value()+1)+"/"+billingSeqNoGenerator.getYear();
+      return (billingSeqNoGenerator.getLast_value())+"/"+billingSeqNoGenerator.getYear();
     }
 
     private void setAmountInGst(Billing billing){

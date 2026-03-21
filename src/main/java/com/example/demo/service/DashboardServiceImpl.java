@@ -103,15 +103,15 @@ public class DashboardServiceImpl implements DashboardService{
         List<Long> checkOutCount = new ArrayList<>();
         dateList.stream().forEach(x -> {
          Long n1,n2 = 0L;
-          Optional<BarChartResponse> res = checkInObject.stream().filter(y-> y.getDay().toString().equalsIgnoreCase(x)).findAny();
+          Optional<BarChartResponse> res = checkInObject.stream().filter(y-> y.getDate().toString().equalsIgnoreCase(x)).findAny();
             if(res.isPresent())
-                checkInCount.add(res.get().getCnt());
+                checkInCount.add(res.get().getCount());
             else
                 checkInCount.add(0L);
 
-            Optional<BarChartResponse> res1 = checkOutObject.stream().filter(y-> y.getDay().toString().equalsIgnoreCase(x)).findAny();
+            Optional<BarChartResponse> res1 = checkOutObject.stream().filter(y-> y.getDate().toString().equalsIgnoreCase(x)).findAny();
             if(res1.isPresent())
-                checkOutCount.add(res1.get().getCnt());
+                checkOutCount.add(res1.get().getCount());
             else
                 checkOutCount.add(0L);
         });

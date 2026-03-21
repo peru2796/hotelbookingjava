@@ -39,7 +39,6 @@ public interface MapperInterface {
     BookingDTO toRoomDetailsDto(RoomDetailsDTO roomDetailsDTO);
 
     @Mapping(target = "roomNumber",source = "roomDetailsDTO.roomNumber")
-    @Mapping(target = "roomTypeName",source = "roomDetailsDTO.roomType")
     @Mapping(target = "roomType",source = "booking.roomType")
     @Mapping(target = "roomId",source = "roomDetailsDTO.id")
     @Mapping(target = "roomRent",source = "roomDetailsDTO.amount")
