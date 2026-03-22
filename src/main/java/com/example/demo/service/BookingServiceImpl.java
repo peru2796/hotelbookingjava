@@ -57,7 +57,7 @@ public class BookingServiceImpl implements BookingService{
     public String createBooking(Booking booking) {
             if(null != booking){
                 long days = ChronoUnit.DAYS.between(booking.getCheckinDts().toLocalDate(), booking.getCheckoutDts().toLocalDate());
-                Optional<RoomType> roomType = roomTypeRepository.findById(Math.toIntExact(booking.getRoomId()));
+                Optional<RoomType> roomType = roomTypeRepository.findById(Math.toIntExact(booking.getRoomType()));
                 days = days == 0? 1:days;
                 booking.setTotalAmount(roomType.get().getAmount()*days);
                 Optional<Booking> optionalBooking = bookingRepository.findById(Objects.isNull(booking.getId())?-1:booking.getId());
