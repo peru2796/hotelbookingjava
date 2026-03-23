@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BillingServiceImpl implements BillingService {
@@ -45,13 +46,18 @@ public class BillingServiceImpl implements BillingService {
     }
 
     @Override
-    public GstReportDTO getGstBillingReport(String fromDate, String toDate) {
+    public GstReportDTO getGstBillingReport(String fromDate, String toDate,Integer gstType) {
         GstReportDTO getReportDTO = new GstReportDTO();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         LocalDateTime fromDateTime = LocalDateTime.parse(fromDate, formatter);
         LocalDateTime toDateTime = LocalDateTime.parse(toDate, formatter);
         List<Billing> billingList = billingRepository.findByBilledDtsBetween(fromDateTime, toDateTime);
+        if(gstType == 1){
+            billingList= billingList.stream().filter(Billing::isGstEnabled).toList();
+        }else if(gstType == 2) {
+            billingList = billingList.stream().filter(x -> !x.isGstEnabled()).toList();
+        }
         List<Client> clientList = clientService.getClientList();
         List<RoomType> roomTypeList = roomTypeRepository.findAll();
         getReportDTO.setBookingDTOList(billingMapper.getBookingDTOFromClientBillingList(billingList, clientList, roomTypeList));

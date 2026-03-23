@@ -13,5 +13,5 @@ public interface BillingService {
 
 
      BookingDTO getBillingById(Long id);
-     GstReportDTO getGstBillingReport(String fromDate, String toDate);
+     GstReportDTO getGstBillingReport(String fromDate, String toDate,Integer gstType);
 }

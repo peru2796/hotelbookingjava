@@ -33,6 +33,13 @@ public class Billing  implements Serializable{
     private String paymentType;
     private Integer transactionStatus;
 
+    private Integer discountAmount;
+
+    @Column(nullable = true)
+    private double discountPercentage;
+
+    @Column(nullable = true)
+    private boolean isGstEnabled = true;
 
     private LocalDateTime  bookedDts;
 

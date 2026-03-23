@@ -28,8 +28,8 @@ public class BillingController {
     }
 
     @GetMapping("/getGstBillingReport")
-    public ResponseEntity<GstReportDTO> getGstBillingReport(@RequestHeader("fromDate") String fromDate, @RequestHeader("toDate") String toDate) {
-        return ResponseEntity.ok(billingService.getGstBillingReport(fromDate,toDate));
+    public ResponseEntity<GstReportDTO> getGstBillingReport(@RequestHeader("fromDate") String fromDate, @RequestHeader("toDate") String toDate,@RequestHeader(value = "gstType",defaultValue = "3") Integer reportType) {
+        return ResponseEntity.ok(billingService.getGstBillingReport(fromDate,toDate,reportType));
     }
 
 

@@ -179,12 +179,25 @@ public class BookingServiceImpl implements BookingService{
         paymentHistory.setStatus(1);
         paymentHistoryRepository.save(paymentHistory);
        Billing billing = mapperInterface.toBooking(booking);
+        if(booking.getDiscountAmount()> 0){
+            double discountPercentage = (booking.getDiscountAmount() / booking.getTotalAmount()) * 100;
+            booking.setDiscountPercentage(discountPercentage);
+            booking.setTotalAmount(booking.getTotalAmount()-booking.getDiscountAmount());
+            billing.setTotalAmount(booking.getTotalAmount()-booking.getDiscountAmount());
+            billing.setDiscountPercentage(discountPercentage);
+        }
         billing.setBillingNumber(billNo());
         billing.setTransactionStatus(AppConstants.CHECKOUT_STATUS_CODE);
         setAmountInGst(billing);
+
       billing = billingRepository.save(billing);
-        bookingRepository.checkOutBooking(booking.getId(),booking.getAmountPaid(),booking.getAmountRemaining(),
-                AppConstants.CHECKOUT_STATUS_CODE,booking.getCheckoutDts(),billing.getId(),billing.getBillingNumber());
+      booking.setTransactionStatus(AppConstants.CHECKOUT_STATUS_CODE);
+      booking.setBillingId(billing.getId());
+      booking.setBillingNumber(billing.getBillingNumber());
+
+      bookingRepository.save(booking);
+//        bookingRepository.checkOutBooking(booking.getId(),booking.getAmountPaid(),booking.getAmountRemaining(),
+//                ,booking.getCheckoutDts(),billing.getId(),billing.getBillingNumber());
 
         return "Success";
     }

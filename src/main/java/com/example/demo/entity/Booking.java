@@ -49,6 +49,13 @@ public class Booking implements Serializable {
     private Long billingId;
     private String billingNumber;
 
+    private Integer discountAmount;
+
+    @Column(nullable = true)
+    private double discountPercentage;
+
+    @Column(nullable = true)
+    private boolean isGstEnabled = true;
 
     @Column(name = "status")
     private Integer status = 1;

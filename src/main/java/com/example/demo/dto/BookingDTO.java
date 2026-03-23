@@ -1,6 +1,7 @@
 package com.example.demo.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.Column;
 import lombok.Data;
 import java.time.LocalDateTime;
 
@@ -77,4 +78,9 @@ public class BookingDTO {
     private String  checkinDateString;
     private String  checkoutDateString;
     private String totalAmountInWords;
+    private Integer discountAmount;
+
+    private double discountPercentage;
+
+    private boolean isGstEnabled;
 }
