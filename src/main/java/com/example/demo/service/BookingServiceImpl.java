@@ -175,7 +175,7 @@ public class BookingServiceImpl implements BookingService{
         PaymentHistory paymentHistory = new PaymentHistory();
         paymentHistory.setBookingId(booking.getId());
         paymentHistory.setBooking(booking);
-        paymentHistory.setAmount(booking.getAmountPaid()-book.getAmountPaid());
+        paymentHistory.setAmount(booking.getAmountPaid()-book.getAmountPaid()-booking.getDiscountAmount());
         paymentHistory.setStatus(1);
         paymentHistoryRepository.save(paymentHistory);
        Billing billing = mapperInterface.toBooking(booking);
@@ -183,12 +183,21 @@ public class BookingServiceImpl implements BookingService{
             double discountPercentage = (booking.getDiscountAmount() / booking.getTotalAmount()) * 100;
             booking.setDiscountPercentage(discountPercentage);
             booking.setTotalAmount(booking.getTotalAmount()-booking.getDiscountAmount());
-            billing.setTotalAmount(booking.getTotalAmount()-booking.getDiscountAmount());
+            booking.setAmountPaid(booking.getTotalAmount());
+            billing.setAmountPaid(booking.getTotalAmount());
+            billing.setTotalAmount(booking.getTotalAmount());
             billing.setDiscountPercentage(discountPercentage);
         }
         billing.setBillingNumber(billNo());
         billing.setTransactionStatus(AppConstants.CHECKOUT_STATUS_CODE);
-        setAmountInGst(billing);
+        if(billing.isGstEnabled()){
+            setAmountInGst(billing);
+        }else{
+            billing.setBaseFare(billing.getTotalAmount());
+            billing.setSgst(0.0);
+            billing.setCgst(0.0);
+        }
+
 
       billing = billingRepository.save(billing);
       booking.setTransactionStatus(AppConstants.CHECKOUT_STATUS_CODE);

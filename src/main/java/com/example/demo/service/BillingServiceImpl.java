@@ -39,7 +39,13 @@ public class BillingServiceImpl implements BillingService {
     @Override
     public BookingDTO getBillingById(Long id) {
         BookingDTO bookingDTO = bookingService.getBookingAndClientDetailsById(id);
-        setAmountInGst(bookingDTO);
+        if(bookingDTO.isGstEnabled()){
+            setAmountInGst(bookingDTO);
+        }else{
+            bookingDTO.setBaseFare(bookingDTO.getTotalAmount());
+            bookingDTO.setSgst(0.0);
+            bookingDTO.setCgst(0.0);
+        }
         bookingDTO.setTotalAmountInWords(mapperInterface.formatTotalAmount(bookingDTO.getAmountPaid()+bookingDTO.getMiscellaneousCharge()));
         bookingDTO.setTotalAmount(bookingDTO.getAmountPaid()+bookingDTO.getMiscellaneousCharge());
         return bookingDTO;
