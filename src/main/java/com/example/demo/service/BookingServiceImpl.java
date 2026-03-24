@@ -172,6 +172,11 @@ public class BookingServiceImpl implements BookingService{
     public String checkOutBooking(Booking booking) {
         booking.setId(booking.getBookingId());
         Booking book = bookingRepository.findById(booking.getId()).get();
+        long days = ChronoUnit.DAYS.between(booking.getCheckinDts().toLocalDate(), booking.getCheckoutDts().toLocalDate());
+        Optional<RoomType> roomType = roomTypeRepository.findById(Math.toIntExact(booking.getRoomType()));
+        days = days == 0? 1:days;
+        booking.setTotalAmount(roomType.get().getAmount()*days);
+
         PaymentHistory paymentHistory = new PaymentHistory();
         paymentHistory.setBookingId(booking.getId());
         paymentHistory.setBooking(booking);
