@@ -193,6 +193,7 @@ public class BookingServiceImpl implements BookingService{
             billing.setTotalAmount(booking.getTotalAmount());
             billing.setDiscountPercentage(discountPercentage);
         }
+        billing.setGstEnabled(booking.isGstEnabled());
         billing.setBillingNumber(billNo());
         billing.setTransactionStatus(AppConstants.CHECKOUT_STATUS_CODE);
         if(billing.isGstEnabled()){

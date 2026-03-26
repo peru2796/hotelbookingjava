@@ -1,9 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.Room;
-import com.example.demo.entity.RoomType;
-import com.example.demo.entity.Settings;
-import com.example.demo.entity.User;
+import com.example.demo.entity.*;
 import com.example.demo.repository.SettingsRepository;
 import com.example.demo.service.LoginService;
 import com.example.demo.service.LoginServiceImpl;
@@ -48,6 +45,11 @@ public class LoginController {
     @GetMapping("/getSettingsList")
     public ResponseEntity<List<Settings>> getStatus(){
         return ResponseEntity.ok(loginService.getSettingList());
+    }
+
+    @GetMapping("/getStateList")
+    public ResponseEntity<List<States>> getStateList(){
+        return ResponseEntity.ok(loginService.getStateList());
     }
 
     @GetMapping("/getRoomTypeList")

@@ -33,6 +33,9 @@ public class LoginServiceImpl implements LoginService {
     @Autowired
     private RoomTypeRepository roomTypeRepository;
 
+    @Autowired
+    private StatesRepository statesRepository;
+
     @Override
     public ResponseEntity<Object> validateLogin(User user) {
         HashMap<String,Object> outputObject = new HashMap<>();
@@ -76,6 +79,11 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public List<RoomType> getRoomTypeList() {
         return roomTypeRepository.findAll();
+    }
+
+    @Override
+    public List<States> getStateList() {
+        return statesRepository.findAll();
     }
 
 }
