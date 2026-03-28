@@ -240,13 +240,15 @@ public class BookingServiceImpl implements BookingService{
 
         LocalDateTime startDateTime = LocalDateTime.parse(startDate, formatter);
         LocalDateTime endDateTime = LocalDateTime.parse(endDate, formatter);
-
+        List<RoomType> roomTypeList = roomTypeRepository.findAll();
         List<Booking> bookingList = bookingRepository.getTodayRoomDetailsList(startDateTime,endDateTime);
         List<BookingDTO> bookingDTOList = new ArrayList<>();
 
         bookingList.stream().forEach(booking -> {
             Client client = clientService.getClientById(booking.getClientId()).get();
             BookingDTO bookingDTO = mapperInterface.toBookingDto(booking,client);
+            Optional<RoomType> roomTypeOptional = roomTypeList.stream().filter(x -> x.getId().equals(booking.getRoomType())).findFirst();
+            bookingDTO.setRoomTypeName(roomTypeOptional.get().getRoomType());
             bookingDTOList.add(bookingDTO);
         });
         return bookingDTOList.stream().sorted(Comparator.comparing(BookingDTO::getBookingId).reversed())
