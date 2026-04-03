@@ -282,9 +282,9 @@ public class BookingServiceImpl implements BookingService{
         Booking book = bookingRepository.findById(booking.getBookingId()).get();
 
         Optional<RoomType> roomType = roomTypeRepository.findById(Math.toIntExact(booking.getRoomType()));
-
+        booking.setId(booking.getBookingId());
         PaymentHistory paymentHistory = new PaymentHistory();
-        paymentHistory.setBookingId(booking.getId());
+        paymentHistory.setBookingId(booking.getBookingId());
         paymentHistory.setBooking(booking);
         paymentHistory.setAmount(booking.getAmountPaid());
         paymentHistory.setStatus(1);
