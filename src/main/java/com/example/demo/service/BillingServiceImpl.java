@@ -47,8 +47,8 @@ public class BillingServiceImpl implements BillingService {
             bookingDTO.setSgst(0.0);
             bookingDTO.setCgst(0.0);
         }
-        bookingDTO.setTotalAmountInWords(mapperInterface.formatTotalAmount(bookingDTO.getAmountPaid()+bookingDTO.getMiscellaneousCharge()));
-        bookingDTO.setTotalAmount(bookingDTO.getAmountPaid()+bookingDTO.getMiscellaneousCharge());
+        bookingDTO.setTotalAmountInWords(mapperInterface.formatTotalAmount(bookingDTO.getTotalAmount()+bookingDTO.getMiscellaneousCharge()));
+        bookingDTO.setTotalAmount(bookingDTO.getTotalAmount()+bookingDTO.getMiscellaneousCharge());
         bookingDTO.setNoOfDaysSpend((int) ChronoUnit.DAYS.between(bookingDTO.getCheckinDts(), bookingDTO.getCheckoutDts())+1);
         return bookingDTO;
     }

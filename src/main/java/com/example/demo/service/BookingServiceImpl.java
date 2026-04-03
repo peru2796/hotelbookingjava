@@ -209,7 +209,7 @@ public class BookingServiceImpl implements BookingService{
       booking.setTransactionStatus(AppConstants.CHECKOUT_STATUS_CODE);
       booking.setBillingId(billing.getId());
       booking.setBillingNumber(billing.getBillingNumber());
-
+      booking.setCreatedDts(book.getCreatedDts());
       bookingRepository.save(booking);
       return "Success";
     }
@@ -293,6 +293,7 @@ public class BookingServiceImpl implements BookingService{
         booking.setAmountPaid(book.getAmountPaid()+booking.getAmountPaid());
 
         bookingRepository.addPaymentBooking(booking.getId(), booking.getAmountPaid(),amountRemaining);
+        billingRepository.addPaymentBilling(book.getBillingId(),booking.getAmountPaid(),booking.getAmountRemaining());
         return "Success";
     }
 }

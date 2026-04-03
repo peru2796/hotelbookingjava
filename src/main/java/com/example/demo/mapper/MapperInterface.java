@@ -25,7 +25,7 @@ public interface MapperInterface {
     @Mapping(target = "bookingId",source = "booking.id")
     @Mapping(target = "clientId",source = "client.id")
     @Mapping(target = "statusName",source = "booking.transactionStatus",qualifiedByName = "transactionStatusMapping")
-    @Mapping(target = "totalAmountInWords",source = "booking.amountPaid",qualifiedByName = "formatTotalAmount")
+    @Mapping(target = "totalAmountInWords",source = "booking.totalAmount",qualifiedByName = "formatTotalAmount")
     @Mapping(target = "paymentType",source = "booking.paymentType",qualifiedByName = "formatPaymentType")
     BookingDTO toBookingDto(Booking booking, Client client);
 
