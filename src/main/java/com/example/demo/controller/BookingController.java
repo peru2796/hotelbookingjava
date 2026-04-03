@@ -94,5 +94,12 @@ public class BookingController {
     public List<RoomServiceOrders> getRoomServiceOrdersByBookingId(@RequestHeader(value = "bookingId",required = false)Long bookingId){
         return bookingService.getRoomServiceOrderByBookingId(bookingId);
     }
+
+    @PostMapping("/addPayment")
+    public ResponseEntity<ApiResponse> addPaymentToClient(
+            @RequestBody Booking req) {
+        String updated = bookingService.addPaymentBooking(req);
+        return ResponseEntity.ok(new ApiResponse(updated, "Checkout completed..."));
+    }
 }
 // Full implementation will include CRUD and JWT logic

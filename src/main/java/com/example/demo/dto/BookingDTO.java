@@ -83,4 +83,6 @@ public class BookingDTO {
     private double discountPercentage;
 
     private boolean isGstEnabled;
+
+    private Integer noOfDaysSpend;
 }

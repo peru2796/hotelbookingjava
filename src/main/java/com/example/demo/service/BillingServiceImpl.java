@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,6 +49,7 @@ public class BillingServiceImpl implements BillingService {
         }
         bookingDTO.setTotalAmountInWords(mapperInterface.formatTotalAmount(bookingDTO.getAmountPaid()+bookingDTO.getMiscellaneousCharge()));
         bookingDTO.setTotalAmount(bookingDTO.getAmountPaid()+bookingDTO.getMiscellaneousCharge());
+        bookingDTO.setNoOfDaysSpend((int) ChronoUnit.DAYS.between(bookingDTO.getCheckinDts(), bookingDTO.getCheckoutDts())+1);
         return bookingDTO;
     }
 

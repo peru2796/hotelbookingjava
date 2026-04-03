@@ -64,4 +64,9 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<BarChartResponse> countCheckoutsByDay(LocalDateTime start, LocalDateTime end);
 
     List<Booking> findByBookedDtsBetween(LocalDateTime start, LocalDateTime end);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE Booking b SET b.amountPaid = :amountPaid,b.amountRemaining =:amountRemaining  WHERE b.id = :id")
+    int addPaymentBooking(@Param("id") Long id, @Param("amountPaid") Double amountPaid, @Param("amountRemaining") Double amountRemaining);
 }

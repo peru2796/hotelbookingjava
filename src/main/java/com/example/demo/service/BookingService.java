@@ -26,4 +26,5 @@ public interface BookingService {
     String addRoomServiceOrders(RoomServiceOrders roomServiceOrders);
     List<BookingDTO> getBookingAndClientDetailsByDateFilter(String fromDate,String toDate);
     public List<RoomServiceOrders> getRoomServiceOrderByBookingId(Long bookingId);
+    String addPaymentBooking(Booking booking);
 }

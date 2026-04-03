@@ -56,7 +56,7 @@ public class BookingServiceImpl implements BookingService{
     @Override
     public String createBooking(Booking booking) {
             if(null != booking){
-                long days = ChronoUnit.DAYS.between(booking.getCheckinDts().toLocalDate(), booking.getCheckoutDts().toLocalDate());
+                long days = ChronoUnit.DAYS.between(booking.getCheckinDts(), booking.getCheckoutDts());
                 Optional<RoomType> roomType = roomTypeRepository.findById(Math.toIntExact(booking.getRoomType()));
                 days = days == 0? 1:days;
                 booking.setTotalAmount(roomType.get().getAmount()*days);
@@ -172,7 +172,7 @@ public class BookingServiceImpl implements BookingService{
     public String checkOutBooking(Booking booking) {
         booking.setId(booking.getBookingId());
         Booking book = bookingRepository.findById(booking.getId()).get();
-        long days = ChronoUnit.DAYS.between(booking.getCheckinDts().toLocalDate(), booking.getCheckoutDts().toLocalDate());
+        long days = ChronoUnit.DAYS.between(booking.getCheckinDts(), booking.getCheckoutDts())+1;
         Optional<RoomType> roomType = roomTypeRepository.findById(Math.toIntExact(booking.getRoomType()));
         days = days == 0? 1:days;
         booking.setTotalAmount(roomType.get().getAmount()*days);
@@ -211,10 +211,7 @@ public class BookingServiceImpl implements BookingService{
       booking.setBillingNumber(billing.getBillingNumber());
 
       bookingRepository.save(booking);
-//        bookingRepository.checkOutBooking(booking.getId(),booking.getAmountPaid(),booking.getAmountRemaining(),
-//                ,booking.getCheckoutDts(),billing.getId(),billing.getBillingNumber());
-
-        return "Success";
+      return "Success";
     }
 
     private String billNo(){
@@ -278,5 +275,24 @@ public class BookingServiceImpl implements BookingService{
     @Override
     public List<RoomServiceOrders> getRoomServiceOrderByBookingId(Long bookingId){
         return roomServiceOrdersRepository.findByBookingId(bookingId);
+    }
+
+    @Override
+    public String addPaymentBooking(Booking booking) {
+        Booking book = bookingRepository.findById(booking.getId()).get();
+
+        Optional<RoomType> roomType = roomTypeRepository.findById(Math.toIntExact(booking.getRoomType()));
+
+        PaymentHistory paymentHistory = new PaymentHistory();
+        paymentHistory.setBookingId(booking.getId());
+        paymentHistory.setBooking(booking);
+        paymentHistory.setAmount(booking.getAmountPaid());
+        paymentHistory.setStatus(1);
+        paymentHistoryRepository.save(paymentHistory);
+        Double amountRemaining = book.getAmountRemaining()-booking.getAmountPaid();
+        booking.setAmountPaid(book.getAmountPaid()+booking.getAmountPaid());
+
+        bookingRepository.addPaymentBooking(booking.getId(), booking.getAmountPaid(),amountRemaining);
+        return "Success";
     }
 }
