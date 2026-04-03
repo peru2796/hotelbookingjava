@@ -279,7 +279,7 @@ public class BookingServiceImpl implements BookingService{
 
     @Override
     public String addPaymentBooking(Booking booking) {
-        Booking book = bookingRepository.findById(booking.getId()).get();
+        Booking book = bookingRepository.findById(booking.getBookingId()).get();
 
         Optional<RoomType> roomType = roomTypeRepository.findById(Math.toIntExact(booking.getRoomType()));
 
@@ -292,7 +292,7 @@ public class BookingServiceImpl implements BookingService{
         Double amountRemaining = book.getAmountRemaining()-booking.getAmountPaid();
         booking.setAmountPaid(book.getAmountPaid()+booking.getAmountPaid());
 
-        bookingRepository.addPaymentBooking(booking.getId(), booking.getAmountPaid(),amountRemaining);
+        bookingRepository.addPaymentBooking(booking.getBookingId(), booking.getAmountPaid(),amountRemaining);
         billingRepository.addPaymentBilling(book.getBillingId(),booking.getAmountPaid(),booking.getAmountRemaining());
         return "Success";
     }
