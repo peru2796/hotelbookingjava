@@ -189,9 +189,12 @@ public class BookingServiceImpl implements BookingService{
             booking.setDiscountPercentage(discountPercentage);
             booking.setTotalAmount(booking.getTotalAmount()-booking.getDiscountAmount());
             booking.setAmountPaid(booking.getTotalAmount());
+            booking.setAmountRemaining(booking.getAmountRemaining()-booking.getDiscountAmount());
             billing.setAmountPaid(booking.getTotalAmount());
             billing.setTotalAmount(booking.getTotalAmount());
+            billing.setAmountRemaining(booking.getAmountRemaining()-booking.getDiscountAmount());
             billing.setDiscountPercentage(discountPercentage);
+            billing.setDiscountAmount(booking.getDiscountAmount());
         }
         billing.setGstEnabled(booking.isGstEnabled());
         billing.setBillingNumber(billNo());
