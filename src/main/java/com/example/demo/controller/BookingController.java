@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @RestController
@@ -25,8 +26,9 @@ public class BookingController {
     private BookingService bookingService;
 
     @PostMapping("/addBooking")
-    public ResponseEntity<ApiResponse> create(@RequestBody Booking booking) {
-        ApiResponse apiResponse = new ApiResponse("200 OK",bookingService.createBooking(booking));
+    public ResponseEntity<ApiResponse> create(@RequestBody Map<String, Booking> booking) {
+
+        ApiResponse apiResponse = new ApiResponse("200 OK",bookingService.createBooking(booking.get("bookingObject")));
         return new ResponseEntity<>(apiResponse,HttpStatus.OK);
     }
 
